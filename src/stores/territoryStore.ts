@@ -1,5 +1,5 @@
 /**
- * Territory Store — Territory Jogger
+ * Territory Store — Territory Runner
  *
  * Zustand store untuk state management wilayah di sisi klien.
  * Mengelola daftar wilayah yang sedang ditampilkan di peta dan klaim yang tertunda.

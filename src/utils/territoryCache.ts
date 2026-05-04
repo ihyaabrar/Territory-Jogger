@@ -1,5 +1,5 @@
 /**
- * Territory Cache — Territory Jogger
+ * Territory Cache — Territory Runner
  *
  * Cache in-memory untuk data wilayah yang sering diakses.
  * Mengurangi query berulang ke Supabase dan memastikan waktu respons ≤ 200ms

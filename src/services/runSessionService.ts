@@ -1,5 +1,5 @@
 /**
- * Run Session Service — Territory Jogger
+ * Run Session Service — Territory Runner
  * Fetch dan simpan data sesi lari dari/ke Supabase
  */
 

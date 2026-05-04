@@ -1,5 +1,5 @@
 /**
- * Barrel export untuk komponen peta Territory Jogger.
+ * Barrel export untuk komponen peta Territory Runner.
  */
 
 export { MapView } from './MapView'

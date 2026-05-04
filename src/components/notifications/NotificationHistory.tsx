@@ -1,5 +1,5 @@
 /**
- * NotificationHistory — Territory Jogger
+ * NotificationHistory — Territory Runner
  *
  * Komponen daftar riwayat notifikasi invasion yang dapat diakses
  * dari menu profil pengguna.

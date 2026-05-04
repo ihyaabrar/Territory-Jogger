@@ -1,5 +1,5 @@
 /**
- * App.tsx — Territory Jogger
+ * App.tsx — Territory Runner
  * Light theme, Strava-inspired navigation
  */
 

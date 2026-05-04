@@ -1,5 +1,5 @@
 /**
- * InvasionAlert — Territory Jogger
+ * InvasionAlert — Territory Runner
  *
  * Overlay in-app yang ditampilkan di atas peta saat invasion terjadi
  * selama sesi lari aktif.

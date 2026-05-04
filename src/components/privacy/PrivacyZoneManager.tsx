@@ -1,5 +1,5 @@
 /**
- * PrivacyZoneManager — Territory Jogger
+ * PrivacyZoneManager — Territory Runner
  * Red Rose theme, konsisten dengan desain aplikasi
  */
 

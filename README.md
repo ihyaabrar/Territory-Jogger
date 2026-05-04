@@ -1,8 +1,8 @@
-# 🏃 Territory Jogger
+# 🏃 Territory Runner
 
 <div align="center">
 
-![Territory Jogger](https://img.shields.io/badge/Territory-Jogger-FF6B35?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTMgM0wxOSAxMkwxMyAyMUg1TDExIDEyTDUgM0gxM1oiIGZpbGw9IndoaXRlIi8+PC9zdmc+)
+![Territory Runner](https://img.shields.io/badge/Territory-Jogger-FF6B35?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTMgM0wxOSAxMkwxMyAyMUg1TDExIDEyTDUgM0gxM1oiIGZpbGw9IndoaXRlIi8+PC9zdmc+)
 
 **Aplikasi jogging gamifikasi berbasis GPS — klaim wilayah nyata dengan berlari!**
 
@@ -20,7 +20,7 @@ Terinspirasi dari Paper.io × Strava × Google Maps
 
 ## 📱 Tentang Aplikasi
 
-**Territory Jogger** adalah aplikasi mobile web yang menggabungkan mekanik *area control* dari game .io (seperti Paper.io) dengan peta dunia nyata. Pengguna berlari di dunia nyata untuk **mengklaim wilayah** di peta, memotong wilayah milik pengguna lain, dan bersaing di leaderboard berdasarkan luas area yang dikuasai.
+**Territory Runner** adalah aplikasi mobile web yang menggabungkan mekanik *area control* dari game .io (seperti Paper.io) dengan peta dunia nyata. Pengguna berlari di dunia nyata untuk **mengklaim wilayah** di peta, memotong wilayah milik pengguna lain, dan bersaing di leaderboard berdasarkan luas area yang dikuasai.
 
 ### 🎯 Konsep Utama
 
@@ -430,13 +430,13 @@ MIT License — lihat [LICENSE](LICENSE)
 
 **Ihya Abrar**
 - GitHub: [@ihyaabrar](https://github.com/ihyaabrar)
-- Project: [Territory Jogger](https://github.com/ihyaabrar/Territory-Jogger)
+- Project: [Territory Runner](https://github.com/ihyaabrar/Territory-Jogger)
 
 ---
 
 <div align="center">
 
-**Berlari lebih bermakna dengan Territory Jogger** 🏃🗺️
+**Berlari lebih bermakna dengan Territory Runner** 🏃🗺️
 
 *Klaim wilayahmu, kalahkan lawan, jadilah yang terkuat!*
 

@@ -1,5 +1,5 @@
 /**
- * Privacy Zone Service — Territory Jogger
+ * Privacy Zone Service — Territory Runner
  *
  * Service untuk manajemen Privacy Zone pengguna.
  * Berinteraksi dengan tabel `privacy_zones` di Supabase.

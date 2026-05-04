@@ -1,5 +1,5 @@
 /**
- * Geometry Engine — Territory Jogger
+ * Geometry Engine — Territory Runner
  *
  * Menjalankan semua operasi geometri di sisi klien menggunakan Turf.js v7.
  * Mengimplementasikan interface GeometryEngine dari src/types/index.ts.

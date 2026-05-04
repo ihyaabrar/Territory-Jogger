@@ -1,5 +1,5 @@
 /**
- * Icon Library — Territory Jogger
+ * Icon Library — Territory Runner
  * Path SVG diambil dari Lucide Icons (lucide.dev) — MIT License
  * Semua icon: viewBox="0 0 24 24", stroke-based, strokeWidth=2
  * Konsisten, teruji, readable di semua ukuran

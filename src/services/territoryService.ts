@@ -1,5 +1,5 @@
 /**
- * Territory Service — Territory Jogger
+ * Territory Service — Territory Runner
  *
  * Service frontend untuk klaim wilayah, query viewport, dan sinkronisasi offline.
  * Memanggil RPC Supabase: `claim_territory` dan `territories_in_viewport`.

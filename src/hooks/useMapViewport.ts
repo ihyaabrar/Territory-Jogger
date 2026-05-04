@@ -1,5 +1,5 @@
 /**
- * useMapViewport — Territory Jogger
+ * useMapViewport — Territory Runner
  *
  * Hook untuk mendeteksi perubahan viewport peta Leaflet dan memuat
  * wilayah yang berada dalam viewport secara inkremental.

@@ -1,5 +1,5 @@
 /**
- * useRealtimeTerritories — Territory Jogger
+ * useRealtimeTerritories — Territory Runner
  *
  * Hook untuk subscribe ke Supabase Realtime dan menerima pembaruan
  * wilayah secara live (INSERT/UPDATE/DELETE pada tabel `territories`).

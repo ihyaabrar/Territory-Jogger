@@ -1,5 +1,5 @@
 /**
- * Logo Territory Jogger
+ * Logo Territory Runner
  * Terinspirasi dari app icon: map pin + runner + dashed route di atas peta
  * Background merah, elemen putih
  */

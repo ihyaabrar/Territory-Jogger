@@ -1,5 +1,5 @@
 /**
- * Core TypeScript interfaces for Territory Jogger
+ * Core TypeScript interfaces for Territory Runner
  * Sesuai dengan design.md - Model Data Frontend
  */
 

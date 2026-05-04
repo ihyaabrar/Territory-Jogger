@@ -1,5 +1,5 @@
 /**
- * Track Utilities — Territory Jogger
+ * Track Utilities — Territory Runner
  *
  * Fungsi utilitas untuk manipulasi jalur lari (track).
  * Menggunakan Turf.js untuk operasi geometri.

@@ -1,5 +1,5 @@
 /**
- * MapView — Territory Jogger
+ * MapView — Territory Runner
  * Dark map dengan koordinat overlay, compass, zoom controls
  */
 
@@ -301,7 +301,7 @@ export function MapView({
         ref={mapContainerRef}
         className={className}
         style={{ position: 'absolute', inset: 0 }}
-        aria-label="Peta wilayah Territory Jogger"
+        aria-label="Peta wilayah Territory Runner"
         role="application"
       />
 

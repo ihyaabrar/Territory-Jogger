@@ -1,5 +1,5 @@
 /**
- * useInvasionNotifications — Territory Jogger
+ * useInvasionNotifications — Territory Runner
  *
  * Hook untuk subscribe ke tabel `invasion_notifications` via Supabase Realtime,
  * mengelola state notifikasi (unread count, list), dan mengirim browser
