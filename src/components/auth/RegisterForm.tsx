@@ -65,9 +65,9 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
         </div>
       </div>
 
-      {/* Form card */}
-      <div style={{ flex: 1, padding: '0 20px 32px', marginTop: -20, overflowY: 'auto' }}>
-        <div style={{ background: '#fff', borderRadius: 24, padding: '28px 20px', boxShadow: '0 8px 40px rgba(0,0,0,0.10)', border: '1px solid #F0EEEE' }}>
+      {/* Form card — naik lebih tinggi untuk menutupi gradient */}
+      <div style={{ flex: 1, padding: '0 20px 32px', marginTop: -32, overflowY: 'auto' }}>
+        <div style={{ background: '#fff', borderRadius: 28, padding: '28px 20px', boxShadow: '0 8px 40px rgba(0,0,0,0.10)', border: '1px solid #F0EEEE' }}>
 
           {success ? (
             <div style={{ textAlign: 'center', padding: '20px 0' }}>
