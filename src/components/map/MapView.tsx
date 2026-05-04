@@ -137,7 +137,6 @@ export function MapView({
     }, 60)
     return () => clearTimeout(t)
   }, [isVisible])
-
   // ─── Update territories ────────────────────────────────────────────────────
   const updateTerritories = useCallback(async (newTerritories: Territory[]) => {
     if (!mapRef.current || !territoryLayerRef.current) return
@@ -259,6 +258,7 @@ export function MapView({
     if (userPosition && mapRef.current) {
       mapRef.current.flyTo([userPosition.lat, userPosition.lng], 17, { duration: 0.8 })
     } else if (mapRef.current) {
+      // Request browser geolocation and fly to it
       mapRef.current.locate({ setView: true, maxZoom: 17 })
     }
   }

@@ -272,7 +272,7 @@ export function RunSession({
       {/* ── Run Panel ── */}
       <div style={{
         position: 'fixed',
-        bottom: 68,
+        bottom: 72,
         left: 0, right: 0,
         zIndex: 50,
         padding: '0 12px 8px',
@@ -393,7 +393,7 @@ export function RunSession({
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20, padding: '0 4px' }}>
-                {(['Time', 'Speed', 'Calories'] as const).map((l) => (
+                {(['Time', 'Pace', 'Calories'] as const).map((l) => (
                   <div key={l} style={{ textAlign: 'center' }}>
                     <div style={{ fontSize: 9, fontWeight: 600, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>{l}</div>
                     <div style={{ fontSize: 14, fontWeight: 800, color: '#CCC' }}>—</div>

@@ -33,7 +33,7 @@ import type { UserProfile } from './types/index'
 type NavPage = 'home' | 'map' | 'history' | 'leaderboard' | 'profile'
 type AuthView = 'login' | 'register'
 
-const NAV_HEIGHT = 68
+const NAV_HEIGHT = 72
 
 function AppContent() {
   const { user, initialized, signOut } = useAuth()
@@ -72,6 +72,21 @@ function AppContent() {
   const handlePositionUpdate = useCallback((position: { lat: number; lng: number } | null) => {
     setUserPosition(position)
   }, [])
+
+  // Auto-request current location when user opens the map page (without starting a run)
+  useEffect(() => {
+    if (activePage !== 'map') return
+    if (userPosition) return // already have position
+    if (!navigator.geolocation) return
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+      },
+      () => { /* silently ignore — user can still use map without GPS */ },
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 30000 }
+    )
+  }, [activePage]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleTrackUpdate = useCallback((track: Feature<LineString> | null) => {
     setRunTrack(track)
@@ -253,16 +268,16 @@ function AppContent() {
         </div>
       )}
 
-      {/* ── BOTTOM NAV — Behance style ── */}
+      {/* ── BOTTOM NAV — Behance style with floating center button ── */}
       <nav style={{
         position: 'fixed', bottom: 0, left: 0, right: 0,
-        height: 68,
+        height: 72,
         background: '#FFFFFF',
         borderTop: '1px solid #F0F0F0',
         zIndex: 100,
         display: 'flex',
         alignItems: 'center',
-        padding: '0 8px',
+        padding: '0 4px',
         boxShadow: '0 -2px 16px rgba(0,0,0,0.06)',
       }} aria-label="Navigasi utama">
 
@@ -270,16 +285,26 @@ function AppContent() {
           <IconHome size={20} color={activePage === 'home' ? '#FF6B35' : '#CCCCCC'} />
         </NavBtn>
 
-        <NavBtn active={activePage === 'map'} onClick={() => setActivePage('map')} label="Activity">
-          <IconMap size={20} color={activePage === 'map' ? '#FF6B35' : '#CCCCCC'} />
-        </NavBtn>
-
-        {/* History — center */}
         <NavBtn active={activePage === 'history'} onClick={() => setActivePage('history')} label="Riwayat">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 8V12L15 15" stroke={activePage === 'history' ? '#FF6B35' : '#CCCCCC'} strokeWidth="2" strokeLinecap="round"/>
             <circle cx="12" cy="12" r="9" stroke={activePage === 'history' ? '#FF6B35' : '#CCCCCC'} strokeWidth="2"/>
           </svg>
+        </NavBtn>
+
+        {/* Activity — CENTER slot (position 3 of 5) */}
+        <NavBtn active={activePage === 'map'} onClick={() => setActivePage('map')} label="Activity">
+          <div style={{
+            width: 44, height: 44, borderRadius: '50%',
+            background: activePage === 'map' ? '#FF6B35' : '#F5F5F5',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: activePage === 'map' ? '0 4px 16px rgba(255,107,53,0.4)' : 'none',
+            transition: 'all 0.2s',
+            marginTop: -14,
+            border: activePage === 'map' ? 'none' : '1px solid #E8E8E8',
+          }}>
+            <IconMap size={22} color={activePage === 'map' ? '#fff' : '#AAAAAA'} />
+          </div>
         </NavBtn>
 
         <NavBtn active={activePage === 'leaderboard'} onClick={() => setActivePage('leaderboard')} label="Peringkat">
