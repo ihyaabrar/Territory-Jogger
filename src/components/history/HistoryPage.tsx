@@ -11,7 +11,7 @@ interface HistoryPageProps {
   totalTerritoryKm2: number
 }
 
-function StatPill({ label, value, color = '#FF6B35' }: { label: string; value: string; color?: string }) {
+function StatPill({ label, value, color = '#C0392B' }: { label: string; value: string; color?: string }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
       <span style={{ fontSize: 15, fontWeight: 900, color, letterSpacing: '-0.02em' }}>{value}</span>
@@ -48,7 +48,7 @@ function ActivityCard({ session, index }: { session: RunSessionRecord; index: nu
       <div style={{ padding: '14px 16px 12px', borderBottom: '1px solid #F8F8F8' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: '#FFF0EB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: '#FDECEA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
               🏃
             </div>
             <div>
@@ -62,7 +62,7 @@ function ActivityCard({ session, index }: { session: RunSessionRecord; index: nu
 
       {/* Stats grid */}
       <div style={{ padding: '14px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <StatPill label="Jarak" value={`${session.distanceKm.toFixed(2)} km`} color="#FF6B35" />
+        <StatPill label="Jarak" value={`${session.distanceKm.toFixed(2)} km`} color="#C0392B" />
         <div style={{ width: 1, height: 32, background: '#F0F0F0' }} />
         <StatPill label="Durasi" value={formatDuration(session.durationSec)} color="#1A1A1A" />
         <div style={{ width: 1, height: 32, background: '#F0F0F0' }} />
@@ -80,7 +80,7 @@ function TotalStats({ sessions }: { sessions: RunSessionRecord[] }) {
   const totalKcal = sessions.reduce((s, r) => s + r.caloriesKcal, 0)
 
   return (
-    <div style={{ background: '#FF6B35', borderRadius: 20, padding: '16px 20px', margin: '0 16px 16px', boxShadow: '0 4px 20px rgba(255,107,53,0.3)' }}>
+    <div style={{ background: '#C0392B', borderRadius: 20, padding: '16px 20px', margin: '0 16px 16px', boxShadow: '0 4px 20px rgba(192,57,43,0.3)' }}>
       <p style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.1em', textTransform: 'uppercase', margin: '0 0 12px' }}>
         Total Semua Aktivitas
       </p>
@@ -147,11 +147,11 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
           <button key={f} type="button" onClick={() => setFilter(f)}
             style={{
               padding: '7px 16px', borderRadius: 99,
-              background: filter === f ? '#FF6B35' : '#fff',
+              background: filter === f ? '#C0392B' : '#fff',
               border: filter === f ? 'none' : '1px solid #F0F0F0',
               color: filter === f ? '#fff' : '#AAA',
               fontSize: 12, fontWeight: 700, cursor: 'pointer',
-              boxShadow: filter === f ? '0 2px 8px rgba(255,107,53,0.3)' : 'none',
+              boxShadow: filter === f ? '0 2px 8px rgba(192,57,43,0.3)' : 'none',
             }}>
             {f === 'all' ? 'Semua' : f === 'week' ? '7 Hari' : '30 Hari'}
           </button>
@@ -168,7 +168,7 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
           <div>
             <p style={{ fontSize: 12, color: '#AAA', margin: '0 0 2px', fontWeight: 600 }}>Total Wilayah Dikuasai</p>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-              <span style={{ fontSize: 20, fontWeight: 900, color: '#FF6B35', letterSpacing: '-0.02em' }}>{totalTerritoryKm2.toFixed(3)}</span>
+              <span style={{ fontSize: 20, fontWeight: 900, color: '#C0392B', letterSpacing: '-0.02em' }}>{totalTerritoryKm2.toFixed(3)}</span>
               <span style={{ fontSize: 11, color: '#AAA', fontWeight: 600 }}>km²</span>
             </div>
           </div>

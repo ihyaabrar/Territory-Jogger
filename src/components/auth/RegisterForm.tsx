@@ -56,7 +56,7 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
         <p style={{ fontSize: 13, color: '#AAA', marginBottom: 24 }}>Bergabung dan mulai klaim wilayah</p>
 
         {error && (
-          <div style={{ padding: '10px 14px', background: '#FFF0EB', border: '1px solid #FFCFBF', borderRadius: 12, color: '#FF6B35', fontSize: 13, marginBottom: 16, fontWeight: 500 }}>
+          <div style={{ padding: '10px 14px', background: '#FDECEA', border: '1px solid #F5B7B1', borderRadius: 12, color: '#C0392B', fontSize: 13, marginBottom: 16, fontWeight: 500 }}>
             {error}
           </div>
         )}
@@ -66,7 +66,7 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
             <label style={labelStyle}>Username</label>
             <input type="text" value={username} onChange={e => setUsername(e.target.value)}
               placeholder="jogger123" autoCapitalize="none" disabled={loading} style={inputStyle}
-              onFocus={e => e.target.style.borderColor = '#FF6B35'}
+              onFocus={e => e.target.style.borderColor = '#C0392B'}
               onBlur={e => e.target.style.borderColor = '#F0F0F0'}
             />
           </div>
@@ -74,7 +74,7 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
             <label style={labelStyle}>Email</label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)}
               placeholder="email@contoh.com" autoComplete="email" disabled={loading} style={inputStyle}
-              onFocus={e => e.target.style.borderColor = '#FF6B35'}
+              onFocus={e => e.target.style.borderColor = '#C0392B'}
               onBlur={e => e.target.style.borderColor = '#F0F0F0'}
             />
           </div>
@@ -82,13 +82,13 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
             <label style={labelStyle}>Kata Sandi</label>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)}
               placeholder="Min. 8 karakter" autoComplete="new-password" disabled={loading} style={inputStyle}
-              onFocus={e => e.target.style.borderColor = '#FF6B35'}
+              onFocus={e => e.target.style.borderColor = '#C0392B'}
               onBlur={e => e.target.style.borderColor = '#F0F0F0'}
             />
           </div>
 
           <button type="submit" disabled={loading}
-            style={{ padding: '15px', background: loading ? '#FFCFBF' : '#FF6B35', color: '#fff', border: 'none', borderRadius: 14, fontSize: 16, fontWeight: 800, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : '0 4px 20px rgba(255,107,53,0.35)', marginTop: 4 }}>
+            style={{ padding: '15px', background: loading ? '#F5B7B1' : '#C0392B', color: '#fff', border: 'none', borderRadius: 14, fontSize: 16, fontWeight: 800, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : '0 4px 20px rgba(255,107,53,0.35)', marginTop: 4 }}>
             {loading ? 'Mendaftar...' : 'Daftar Sekarang'}
           </button>
         </form>
@@ -98,7 +98,7 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
         <p style={{ marginTop: 24, fontSize: 14, color: '#AAA' }}>
           Sudah punya akun?{' '}
           <button type="button" onClick={onSwitchToLogin}
-            style={{ background: 'none', border: 'none', color: '#FF6B35', fontWeight: 700, cursor: 'pointer', fontSize: 14 }}>
+            style={{ background: 'none', border: 'none', color: '#C0392B', fontWeight: 700, cursor: 'pointer', fontSize: 14 }}>
             Masuk
           </button>
         </p>

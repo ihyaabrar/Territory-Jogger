@@ -282,10 +282,10 @@ export function RunSession({
         pointerEvents: 'none',
       }}>
         {/* Alerts */}
-        {speedWarn && <Alert color="#FF6B35" bg="#FFF0EB" border="#FFCFBF">🚗 Kecepatan terlalu tinggi — klaim dibatalkan</Alert>}
+        {speedWarn && <Alert color="#C0392B" bg="#FDECEA" border="#F5B7B1">🚗 Kecepatan terlalu tinggi — klaim dibatalkan</Alert>}
         {claimMsg && <Alert color="#16A34A" bg="#F0FDF4" border="#BBF7D0">{claimMsg}</Alert>}
         {startErr && (
-          <Alert color="#FF6B35" bg="#FFF0EB" border="#FFCFBF">
+          <Alert color="#C0392B" bg="#FDECEA" border="#F5B7B1">
             ⚠️ {startErr}
             {startErr.includes('ditolak') && (
               <p style={{ fontSize: 11, marginTop: 4, opacity: 0.8 }}>
@@ -323,9 +323,9 @@ export function RunSession({
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 {isRunning && (
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF6B35', boxShadow: '0 0 8px #FF6B35', animation: 'pulse-ring 1.5s ease-out infinite' }} />
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#C0392B', boxShadow: '0 0 8px #C0392B', animation: 'pulse-ring 1.5s ease-out infinite' }} />
                 )}
-                <span style={{ fontSize: 16, fontWeight: 900, color: '#FF6B35', letterSpacing: '-0.02em' }}>{dist.toFixed(2)} km</span>
+                <span style={{ fontSize: 16, fontWeight: 900, color: '#C0392B', letterSpacing: '-0.02em' }}>{dist.toFixed(2)} km</span>
                 <span style={{ fontSize: 13, color: '#AAA', fontWeight: 600 }}>{fmtDur(dur)}</span>
               </div>
               {isRunning && (
@@ -344,7 +344,7 @@ export function RunSession({
               <div style={{ textAlign: 'center', marginBottom: 16 }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: '#AAA', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 4 }}>Distance</div>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 52, fontWeight: 900, color: '#FF6B35', letterSpacing: '-0.04em', lineHeight: 1 }}>{dist.toFixed(2)}</span>
+                  <span style={{ fontSize: 52, fontWeight: 900, color: '#C0392B', letterSpacing: '-0.04em', lineHeight: 1 }}>{dist.toFixed(2)}</span>
                   <span style={{ fontSize: 18, fontWeight: 700, color: '#AAA' }}>km</span>
                 </div>
               </div>
@@ -387,7 +387,7 @@ export function RunSession({
               <div style={{ textAlign: 'center', marginBottom: 16 }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: '#AAA', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 4 }}>Distance</div>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 52, fontWeight: 900, color: '#FF6B35', letterSpacing: '-0.04em', lineHeight: 1 }}>00.00</span>
+                  <span style={{ fontSize: 52, fontWeight: 900, color: '#C0392B', letterSpacing: '-0.04em', lineHeight: 1 }}>00.00</span>
                   <span style={{ fontSize: 18, fontWeight: 700, color: '#AAA' }}>km</span>
                 </div>
               </div>
@@ -409,15 +409,15 @@ export function RunSession({
                   aria-label="Mulai lari"
                   style={{
                     width: 64, height: 64, borderRadius: '50%',
-                    background: isStarting ? '#FFCFBF' : '#FF6B35',
+                    background: isStarting ? '#F5B7B1' : '#C0392B',
                     border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     cursor: isStarting ? 'not-allowed' : 'pointer',
-                    boxShadow: isStarting ? 'none' : '0 4px 20px rgba(255,107,53,0.4)',
+                    boxShadow: isStarting ? 'none' : '0 4px 20px rgba(192,57,43,0.4)',
                     transition: 'all 0.2s', position: 'relative',
                   }}
                 >
                   {!isStarting && (
-                    <div style={{ position: 'absolute', inset: -4, borderRadius: '50%', border: '2px solid rgba(255,107,53,0.3)', animation: 'pulse-ring 2s ease-out infinite' }} />
+                    <div style={{ position: 'absolute', inset: -4, borderRadius: '50%', border: '2px solid rgba(192,57,43,0.3)', animation: 'pulse-ring 2s ease-out infinite' }} />
                   )}
                   {isStarting ? (
                     <div style={{ width: 20, height: 20, borderRadius: '50%', border: '2.5px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', animation: 'spin 0.8s linear infinite' }} />

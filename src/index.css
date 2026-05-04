@@ -1,30 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-/* ─── Design System — Behance Running App Style ─────────────────────────────── */
+/* ─── Design System — Red Rose Theme ─────────────────────────────────────────── */
 :root {
   /* Core palette */
   --white:       #FFFFFF;
-  --bg:          #F8F8F8;
+  --bg:          #F8F7F7;
   --card:        #FFFFFF;
-  --border:      #F0F0F0;
-  --border-2:    #E8E8E8;
+  --border:      #F0EEEE;
+  --border-2:    #E8E4E4;
 
-  /* Orange accent — primary brand color */
-  --orange:      #FF6B35;
-  --orange-light:#FFF0EB;
-  --orange-mid:  rgba(255,107,53,0.15);
-  --orange-glow: 0 4px 20px rgba(255,107,53,0.3);
+  /* Red Rose — primary brand color */
+  --rose:        #C0392B;
+  --rose-deep:   #96281B;
+  --rose-light:  #FDECEA;
+  --rose-mid:    rgba(192,57,43,0.15);
+  --rose-glow:   0 4px 20px rgba(192,57,43,0.35);
 
   /* Text hierarchy */
-  --t1:  #1A1A1A;   /* primary — headings, big numbers */
-  --t2:  #555555;   /* secondary — labels */
-  --t3:  #AAAAAA;   /* muted — hints, units */
-  --t4:  #CCCCCC;   /* disabled */
+  --t1:  #1A1A1A;
+  --t2:  #555555;
+  --t3:  #AAAAAA;
+  --t4:  #CCCCCC;
 
   /* Semantic */
-  --green:  #4CAF50;
-  --blue:   #2196F3;
-  --red:    #F44336;
+  --green:  #27AE60;
+  --blue:   #2980B9;
+  --red:    #C0392B;
 
   /* Radius */
   --r-sm:   10px;
@@ -58,11 +59,11 @@ input { font-family: inherit; }
 /* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #E0E0E0; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #E0D8D8; border-radius: 3px; }
 
 /* ─── Leaflet overrides ──────────────────────────────────────────────────────── */
 .leaflet-container {
-  background: #E8E8E8 !important;
+  background: #EAE6E6 !important;
   font-family: 'Inter', sans-serif !important;
 }
 .leaflet-control-attribution {

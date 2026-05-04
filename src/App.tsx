@@ -125,14 +125,14 @@ function AppContent() {
     })
   }, [user])
 
-  const userColor = userProfile?.userColor ?? '#FF6B35'
+  const userColor = userProfile?.userColor ?? '#C0392B'
   const username = userProfile?.username ?? (user?.email?.split('@')[0] ?? 'Jogger')
 
   // ─── Loading ───────────────────────────────────────────────────────────────
   if (!initialized) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 12, background: '#F8F8F8' }}>
-        <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid rgba(255,107,53,0.15)', borderTopColor: '#FF6B35', animation: 'spin 0.8s linear infinite' }} />
+        <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid rgba(192,57,43,0.15)', borderTopColor: '#C0392B', animation: 'spin 0.8s linear infinite' }} />
         <p style={{ color: '#888', fontSize: 14 }}>Memuat...</p>
       </div>
     )
@@ -153,7 +153,7 @@ function AppContent() {
       <div style={{ height: '100dvh', background: '#F8F8F8', display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderBottom: '1px solid #F0F0F0', background: '#fff' }}>
           <button type="button" onClick={() => setShowNotifications(false)}
-            style={{ background: 'none', border: 'none', color: '#FF6B35', cursor: 'pointer', fontSize: 14, fontWeight: 700, padding: 0 }}>
+            style={{ background: 'none', border: 'none', color: '#C0392B', cursor: 'pointer', fontSize: 14, fontWeight: 700, padding: 0 }}>
             ← Kembali
           </button>
           <h1 style={{ fontSize: 16, fontWeight: 800, color: '#1A1A1A', margin: 0 }}>Notifikasi</h1>
@@ -177,7 +177,7 @@ function AppContent() {
       <div style={{ height: '100dvh', background: '#F8F8F8', display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderBottom: '1px solid #F0F0F0', background: '#fff' }}>
           <button type="button" onClick={() => setShowPrivacy(false)}
-            style={{ background: 'none', border: 'none', color: '#FF6B35', cursor: 'pointer', fontSize: 14, fontWeight: 700, padding: 0 }}>
+            style={{ background: 'none', border: 'none', color: '#C0392B', cursor: 'pointer', fontSize: 14, fontWeight: 700, padding: 0 }}>
             ← Kembali
           </button>
           <h1 style={{ fontSize: 16, fontWeight: 800, color: '#1A1A1A', margin: 0 }}>Privacy Zone</h1>
@@ -282,13 +282,13 @@ function AppContent() {
       }} aria-label="Navigasi utama">
 
         <NavBtn active={activePage === 'home'} onClick={() => setActivePage('home')} label="Summary">
-          <IconHome size={20} color={activePage === 'home' ? '#FF6B35' : '#CCCCCC'} />
+          <IconHome size={20} color={activePage === 'home' ? '#C0392B' : '#CCCCCC'} />
         </NavBtn>
 
         <NavBtn active={activePage === 'history'} onClick={() => setActivePage('history')} label="Riwayat">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 8V12L15 15" stroke={activePage === 'history' ? '#FF6B35' : '#CCCCCC'} strokeWidth="2" strokeLinecap="round"/>
-            <circle cx="12" cy="12" r="9" stroke={activePage === 'history' ? '#FF6B35' : '#CCCCCC'} strokeWidth="2"/>
+            <path d="M12 8V12L15 15" stroke={activePage === 'history' ? '#C0392B' : '#CCCCCC'} strokeWidth="2" strokeLinecap="round"/>
+            <circle cx="12" cy="12" r="9" stroke={activePage === 'history' ? '#C0392B' : '#CCCCCC'} strokeWidth="2"/>
           </svg>
         </NavBtn>
 
@@ -296,9 +296,9 @@ function AppContent() {
         <NavBtn active={activePage === 'map'} onClick={() => setActivePage('map')} label="Activity">
           <div style={{
             width: 44, height: 44, borderRadius: '50%',
-            background: activePage === 'map' ? '#FF6B35' : '#F5F5F5',
+            background: activePage === 'map' ? '#C0392B' : '#F5F5F5',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: activePage === 'map' ? '0 4px 16px rgba(255,107,53,0.4)' : 'none',
+            boxShadow: activePage === 'map' ? '0 4px 16px rgba(192,57,43,0.4)' : 'none',
             transition: 'all 0.2s',
             marginTop: -14,
             border: activePage === 'map' ? 'none' : '1px solid #E8E8E8',
@@ -308,14 +308,14 @@ function AppContent() {
         </NavBtn>
 
         <NavBtn active={activePage === 'leaderboard'} onClick={() => setActivePage('leaderboard')} label="Peringkat">
-          <IconTrophy size={20} color={activePage === 'leaderboard' ? '#FF6B35' : '#CCCCCC'} />
+          <IconTrophy size={20} color={activePage === 'leaderboard' ? '#C0392B' : '#CCCCCC'} />
         </NavBtn>
 
         <NavBtn active={activePage === 'profile'} onClick={() => setActivePage('profile')} label="Settings">
           <div style={{ position: 'relative' }}>
-            <IconUser size={20} color={activePage === 'profile' ? '#FF6B35' : '#CCCCCC'} />
+            <IconUser size={20} color={activePage === 'profile' ? '#C0392B' : '#CCCCCC'} />
             {unreadCount > 0 && (
-              <span style={{ position: 'absolute', top: -4, right: -4, width: 14, height: 14, background: '#FF6B35', borderRadius: '50%', fontSize: 8, fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ position: 'absolute', top: -4, right: -4, width: 14, height: 14, background: '#C0392B', borderRadius: '50%', fontSize: 8, fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
@@ -341,7 +341,7 @@ function NavBtn({ active, onClick, label, children }: {
       {children}
       <span style={{
         fontSize: 9, fontWeight: active ? 700 : 500,
-        color: active ? '#FF6B35' : '#CCCCCC',
+        color: active ? '#C0392B' : '#CCCCCC',
         letterSpacing: '0.02em', lineHeight: 1,
         transition: 'color 0.15s',
       }}>
@@ -350,7 +350,7 @@ function NavBtn({ active, onClick, label, children }: {
       {active && (
         <span style={{
           position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
-          width: 20, height: 3, borderRadius: '3px 3px 0 0', background: '#FF6B35',
+          width: 20, height: 3, borderRadius: '3px 3px 0 0', background: '#C0392B',
         }} />
       )}
     </button>

@@ -38,17 +38,17 @@ function WeeklyChart({ data, todayIdx }: { data: number[]; todayIdx: number }) {
             <rect
               x={x} y={H - barH} width={barW} height={barH}
               rx={6}
-              fill={isToday ? '#FF6B35' : hasData ? '#FFE0D6' : '#F5F5F5'}
+              fill={isToday ? '#C0392B' : hasData ? '#FADBD8' : '#F5F5F5'}
             />
             {/* Value label on today */}
             {isToday && val > 0 && (
-              <text x={x + barW/2} y={H - barH - 6} textAnchor="middle" fontSize="9" fontWeight="700" fill="#FF6B35" fontFamily="Inter, sans-serif">
+              <text x={x + barW/2} y={H - barH - 6} textAnchor="middle" fontSize="9" fontWeight="700" fill="#C0392B" fontFamily="Inter, sans-serif">
                 {val.toFixed(1)}km
               </text>
             )}
             {/* Day label */}
             <text x={x + barW/2} y={H + 14} textAnchor="middle" fontSize="9"
-              fill={isToday ? '#FF6B35' : '#CCCCCC'}
+              fill={isToday ? '#C0392B' : '#CCCCCC'}
               fontWeight={isToday ? '700' : '400'}
               fontFamily="Inter, sans-serif">
               {days[i]}
@@ -78,7 +78,7 @@ function DateSelector() {
           <div key={i} style={{
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
             padding: '8px 6px',
-            background: isToday ? '#FF6B35' : 'transparent',
+            background: isToday ? '#C0392B' : 'transparent',
             borderRadius: 12,
             minWidth: 36,
           }}>
@@ -109,7 +109,7 @@ function MiniStat({ label, value, unit, icon }: { label: string; value: string; 
       </div>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 3 }}>
         <span style={{ fontSize: 20, fontWeight: 900, color: '#1A1A1A', letterSpacing: '-0.03em', lineHeight: 1 }}>{value}</span>
-        <span style={{ fontSize: 10, color: '#FF6B35', fontWeight: 700 }}>{unit}</span>
+        <span style={{ fontSize: 10, color: '#C0392B', fontWeight: 700 }}>{unit}</span>
       </div>
     </div>
   )
@@ -124,7 +124,7 @@ function ActivityItem({ session }: { session: RunSessionRecord }) {
       display: 'flex', alignItems: 'center', gap: 14,
     }}>
       {/* Icon */}
-      <div style={{ width: 44, height: 44, borderRadius: 14, background: '#FFF0EB', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+      <div style={{ width: 44, height: 44, borderRadius: 14, background: '#FDECEA', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
         <span style={{ fontSize: 20 }}>🏃</span>
       </div>
 
@@ -140,7 +140,7 @@ function ActivityItem({ session }: { session: RunSessionRecord }) {
 
       {/* Stats */}
       <div style={{ textAlign: 'right', flexShrink: 0 }}>
-        <p style={{ fontSize: 16, fontWeight: 900, color: '#FF6B35', margin: '0 0 1px', letterSpacing: '-0.02em' }}>
+        <p style={{ fontSize: 16, fontWeight: 900, color: '#C0392B', margin: '0 0 1px', letterSpacing: '-0.02em' }}>
           {session.distanceKm.toFixed(2)} km
         </p>
         <p style={{ fontSize: 11, color: '#AAA', margin: 0 }}>
@@ -233,14 +233,14 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
           <div style={{ textAlign: 'right' }}>
             <p style={{ fontSize: 10, fontWeight: 700, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 4px' }}>Burned</p>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 3, justifyContent: 'flex-end' }}>
-              <span style={{ fontSize: 20, fontWeight: 800, color: '#FF6B35' }}>{loading ? '—' : weeklyStats.totalCalories}</span>
+              <span style={{ fontSize: 20, fontWeight: 800, color: '#C0392B' }}>{loading ? '—' : weeklyStats.totalCalories}</span>
               <span style={{ fontSize: 11, color: '#AAA', fontWeight: 600 }}>cal</span>
             </div>
           </div>
         </div>
         {loading ? (
           <div style={{ height: 96, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: 24, height: 24, borderRadius: '50%', border: '2.5px solid #FFE0D6', borderTopColor: '#FF6B35', animation: 'spin 0.8s linear infinite' }} />
+            <div style={{ width: 24, height: 24, borderRadius: '50%', border: '2.5px solid #FADBD8', borderTopColor: '#C0392B', animation: 'spin 0.8s linear infinite' }} />
           </div>
         ) : (
           <WeeklyChart data={weeklyStats.dailyDistanceKm} todayIdx={todayIdx} />
@@ -251,7 +251,7 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
       <div style={{ padding: '0 16px', marginBottom: 12, display: 'flex', gap: 8 }}>
         {/* Territory card */}
         <button type="button" onClick={() => onNavigate('map')}
-          style={{ flex: 1, background: '#FF6B35', borderRadius: 20, padding: '16px 14px', border: 'none', cursor: 'pointer', textAlign: 'left', boxShadow: '0 4px 16px rgba(255,107,53,0.3)' }}>
+          style={{ flex: 1, background: '#C0392B', borderRadius: 20, padding: '16px 14px', border: 'none', cursor: 'pointer', textAlign: 'left', boxShadow: '0 4px 16px rgba(192,57,43,0.3)' }}>
           <p style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.1em', textTransform: 'uppercase', margin: '0 0 6px' }}>Territory</p>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
             <span style={{ fontSize: 24, fontWeight: 900, color: '#fff', letterSpacing: '-0.03em' }}>{totalTerritoryKm2.toFixed(2)}</span>
@@ -286,7 +286,7 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
           <p style={{ fontSize: 14, fontWeight: 800, color: '#1A1A1A', margin: 0 }}>My Walk List</p>
           {weeklyStats.sessionCount > 0 && (
-            <span style={{ fontSize: 11, color: '#FF6B35', fontWeight: 600 }}>{weeklyStats.sessionCount} sesi</span>
+            <span style={{ fontSize: 11, color: '#C0392B', fontWeight: 600 }}>{weeklyStats.sessionCount} sesi</span>
           )}
         </div>
 
@@ -302,7 +302,7 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
             <p style={{ fontSize: 14, fontWeight: 700, color: '#1A1A1A', margin: '0 0 4px' }}>Belum ada aktivitas</p>
             <p style={{ fontSize: 12, color: '#AAA', margin: '0 0 16px' }}>Mulai lari pertamamu!</p>
             <button type="button" onClick={() => onNavigate('map')}
-              style={{ padding: '10px 24px', background: '#FF6B35', color: '#fff', border: 'none', borderRadius: 99, fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(255,107,53,0.3)' }}>
+              style={{ padding: '10px 24px', background: '#C0392B', color: '#fff', border: 'none', borderRadius: 99, fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(192,57,43,0.3)' }}>
               Mulai Lari
             </button>
           </div>
@@ -317,11 +317,11 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
       {recentSessions.length > 0 && (
         <div style={{ padding: '12px 16px 0', display: 'flex', gap: 10 }}>
           <button type="button" onClick={() => onNavigate('history')}
-            style={{ flex: 1, padding: '13px', background: '#FF6B35', color: '#fff', border: 'none', borderRadius: 14, fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(255,107,53,0.3)' }}>
+            style={{ flex: 1, padding: '13px', background: '#C0392B', color: '#fff', border: 'none', borderRadius: 14, fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(192,57,43,0.3)' }}>
             Lihat Riwayat
           </button>
           <button type="button" onClick={() => onNavigate('map')}
-            style={{ flex: 1, padding: '13px', background: '#fff', color: '#FF6B35', border: '2px solid #FF6B35', borderRadius: 14, fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+            style={{ flex: 1, padding: '13px', background: '#fff', color: '#C0392B', border: '2px solid #C0392B', borderRadius: 14, fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
             Buka Peta
           </button>
         </div>

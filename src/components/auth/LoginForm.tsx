@@ -37,7 +37,7 @@ export function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormProps) {
         <p style={{ fontSize: 13, color: '#AAA', marginBottom: 28 }}>Masuk untuk mulai berlari</p>
 
         {error && (
-          <div style={{ padding: '10px 14px', background: '#FFF0EB', border: '1px solid #FFCFBF', borderRadius: 12, color: '#FF6B35', fontSize: 13, marginBottom: 16, fontWeight: 500 }}>
+          <div style={{ padding: '10px 14px', background: '#FDECEA', border: '1px solid #F5B7B1', borderRadius: 12, color: '#C0392B', fontSize: 13, marginBottom: 16, fontWeight: 500 }}>
             {error}
           </div>
         )}
@@ -48,7 +48,7 @@ export function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormProps) {
             <input type="email" value={email} onChange={e => setEmail(e.target.value)}
               placeholder="email@contoh.com" autoComplete="email" disabled={loading}
               style={{ width: '100%', padding: '13px 16px', background: '#F8F8F8', border: '1.5px solid #F0F0F0', borderRadius: 14, fontSize: 15, color: '#1A1A1A', outline: 'none' }}
-              onFocus={e => e.target.style.borderColor = '#FF6B35'}
+              onFocus={e => e.target.style.borderColor = '#C0392B'}
               onBlur={e => e.target.style.borderColor = '#F0F0F0'}
             />
           </div>
@@ -58,13 +58,13 @@ export function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormProps) {
             <input type="password" value={password} onChange={e => setPassword(e.target.value)}
               placeholder="••••••••" autoComplete="current-password" disabled={loading}
               style={{ width: '100%', padding: '13px 16px', background: '#F8F8F8', border: '1.5px solid #F0F0F0', borderRadius: 14, fontSize: 15, color: '#1A1A1A', outline: 'none' }}
-              onFocus={e => e.target.style.borderColor = '#FF6B35'}
+              onFocus={e => e.target.style.borderColor = '#C0392B'}
               onBlur={e => e.target.style.borderColor = '#F0F0F0'}
             />
           </div>
 
           <button type="submit" disabled={loading}
-            style={{ padding: '15px', background: loading ? '#FFCFBF' : '#FF6B35', color: '#fff', border: 'none', borderRadius: 14, fontSize: 16, fontWeight: 800, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : '0 4px 20px rgba(255,107,53,0.35)', marginTop: 4, letterSpacing: '0.01em' }}>
+            style={{ padding: '15px', background: loading ? '#F5B7B1' : '#C0392B', color: '#fff', border: 'none', borderRadius: 14, fontSize: 16, fontWeight: 800, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : '0 4px 20px rgba(255,107,53,0.35)', marginTop: 4, letterSpacing: '0.01em' }}>
             {loading ? 'Masuk...' : 'Masuk'}
           </button>
         </form>
@@ -75,7 +75,7 @@ export function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormProps) {
         <p style={{ marginTop: 24, fontSize: 14, color: '#AAA' }}>
           Belum punya akun?{' '}
           <button type="button" onClick={onSwitchToRegister}
-            style={{ background: 'none', border: 'none', color: '#FF6B35', fontWeight: 700, cursor: 'pointer', fontSize: 14 }}>
+            style={{ background: 'none', border: 'none', color: '#C0392B', fontWeight: 700, cursor: 'pointer', fontSize: 14 }}>
             Daftar
           </button>
         </p>

@@ -106,13 +106,13 @@ export function PostRunSummary({
       {/* Header */}
       <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #F5F5F5', flexShrink: 0 }}>
         <button type="button" onClick={onClose}
-          style={{ background: 'none', border: 'none', fontSize: 14, fontWeight: 700, color: '#FF6B35', cursor: 'pointer', padding: 0 }}>
+          style={{ background: 'none', border: 'none', fontSize: 14, fontWeight: 700, color: '#C0392B', cursor: 'pointer', padding: 0 }}>
           ✕ Tutup
         </button>
         <h1 style={{ fontSize: 16, fontWeight: 900, color: '#1A1A1A', margin: 0 }}>Jogging Completed</h1>
         {onShare && (
           <button type="button" onClick={onShare}
-            style={{ background: 'none', border: 'none', fontSize: 14, fontWeight: 700, color: '#FF6B35', cursor: 'pointer', padding: 0 }}>
+            style={{ background: 'none', border: 'none', fontSize: 14, fontWeight: 700, color: '#C0392B', cursor: 'pointer', padding: 0 }}>
             Share
           </button>
         )}
@@ -123,7 +123,7 @@ export function PostRunSummary({
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
           <p style={{ fontSize: 10, fontWeight: 700, color: '#AAA', letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 6px' }}>Distance</p>
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 8 }}>
-            <span style={{ fontSize: 56, fontWeight: 900, color: '#FF6B35', letterSpacing: '-0.04em', lineHeight: 1 }}>
+            <span style={{ fontSize: 56, fontWeight: 900, color: '#C0392B', letterSpacing: '-0.04em', lineHeight: 1 }}>
               {distanceKm.toFixed(2)}
             </span>
             <span style={{ fontSize: 20, fontWeight: 700, color: '#AAA' }}>km</span>
@@ -140,10 +140,10 @@ export function PostRunSummary({
         {/* Territory stats */}
         {(claimedCount > 0 || territoryKm2 > 0) && (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
-            <div style={{ background: '#FFF0EB', borderRadius: 16, padding: '14px', textAlign: 'center', border: '1px solid #FFCFBF' }}>
-              <p style={{ fontSize: 10, fontWeight: 700, color: '#FFAA88', letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 4px' }}>Wilayah Diklaim</p>
-              <p style={{ fontSize: 28, fontWeight: 900, color: '#FF6B35', margin: 0, letterSpacing: '-0.03em' }}>{claimedCount}</p>
-              <p style={{ fontSize: 10, color: '#FFAA88', margin: 0, fontWeight: 600 }}>area baru</p>
+            <div style={{ background: '#FDECEA', borderRadius: 16, padding: '14px', textAlign: 'center', border: '1px solid #F5B7B1' }}>
+              <p style={{ fontSize: 10, fontWeight: 700, color: '#E59866', letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 4px' }}>Wilayah Diklaim</p>
+              <p style={{ fontSize: 28, fontWeight: 900, color: '#C0392B', margin: 0, letterSpacing: '-0.03em' }}>{claimedCount}</p>
+              <p style={{ fontSize: 10, color: '#E59866', margin: 0, fontWeight: 600 }}>area baru</p>
             </div>
             <div style={{ background: '#F0FDF4', borderRadius: 16, padding: '14px', textAlign: 'center', border: '1px solid #BBF7D0' }}>
               <p style={{ fontSize: 10, fontWeight: 700, color: '#86EFAC', letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 4px' }}>Total Wilayah</p>
@@ -162,12 +162,12 @@ export function PostRunSummary({
         {/* Action buttons */}
         <div style={{ display: 'flex', gap: 12 }}>
           <button type="button" onClick={onClose}
-            style={{ flex: 1, padding: '14px', background: '#FF6B35', color: '#fff', border: 'none', borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: 'pointer', boxShadow: '0 4px 14px rgba(255,107,53,0.3)' }}>
+            style={{ flex: 1, padding: '14px', background: '#C0392B', color: '#fff', border: 'none', borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: 'pointer', boxShadow: '0 4px 14px rgba(192,57,43,0.3)' }}>
             Selesai
           </button>
           {onShare && (
             <button type="button" onClick={onShare}
-              style={{ flex: 1, padding: '14px', background: '#fff', color: '#FF6B35', border: '1.5px solid #FFCFBF', borderRadius: 14, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
+              style={{ flex: 1, padding: '14px', background: '#fff', color: '#C0392B', border: '1.5px solid #F5B7B1', borderRadius: 14, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
               📤 Bagikan
             </button>
           )}

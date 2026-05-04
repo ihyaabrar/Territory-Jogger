@@ -44,9 +44,9 @@ function EntryRow({ entry, isMe }: { entry: LeaderboardEntry; isMe: boolean }) {
     <div style={{
       display: 'flex', alignItems: 'center', gap: 12,
       padding: '12px 16px',
-      background: isMe ? '#FFF0EB' : '#fff',
+      background: isMe ? '#FDECEA' : '#fff',
       borderRadius: 16,
-      border: isMe ? '1.5px solid #FFCFBF' : '1px solid #F5F5F5',
+      border: isMe ? '1.5px solid #F5B7B1' : '1px solid #F5F5F5',
       boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
     }}>
       <RankBadge rank={entry.rank} />
@@ -69,7 +69,7 @@ function EntryRow({ entry, isMe }: { entry: LeaderboardEntry; isMe: boolean }) {
             {entry.username}
           </p>
           {isMe && (
-            <span style={{ fontSize: 9, fontWeight: 700, color: '#FF6B35', background: '#FFF0EB', border: '1px solid #FFCFBF', padding: '1px 6px', borderRadius: 99, flexShrink: 0 }}>
+            <span style={{ fontSize: 9, fontWeight: 700, color: '#C0392B', background: '#FDECEA', border: '1px solid #F5B7B1', padding: '1px 6px', borderRadius: 99, flexShrink: 0 }}>
               KAMU
             </span>
           )}
@@ -82,7 +82,7 @@ function EntryRow({ entry, isMe }: { entry: LeaderboardEntry; isMe: boolean }) {
 
       {/* Area */}
       <div style={{ textAlign: 'right', flexShrink: 0 }}>
-        <p style={{ fontSize: 18, fontWeight: 900, color: isMe ? '#FF6B35' : '#1A1A1A', margin: 0, letterSpacing: '-0.02em' }}>
+        <p style={{ fontSize: 18, fontWeight: 900, color: isMe ? '#C0392B' : '#1A1A1A', margin: 0, letterSpacing: '-0.02em' }}>
           {entry.totalAreaKm2.toFixed(2)}
         </p>
         <p style={{ fontSize: 10, color: '#AAA', margin: 0, fontWeight: 600 }}>km²</p>
@@ -165,7 +165,7 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
           {myRank && (
             <div style={{ textAlign: 'right' }}>
               <p style={{ fontSize: 10, color: '#AAA', margin: '0 0 2px', fontWeight: 600 }}>Peringkat Kamu</p>
-              <p style={{ fontSize: 24, fontWeight: 900, color: '#FF6B35', margin: 0, letterSpacing: '-0.03em' }}>#{myRank}</p>
+              <p style={{ fontSize: 24, fontWeight: 900, color: '#C0392B', margin: 0, letterSpacing: '-0.03em' }}>#{myRank}</p>
             </div>
           )}
         </div>
@@ -180,9 +180,9 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
                 flex: 1, padding: '10px 4px',
                 border: 'none', background: 'transparent',
                 fontSize: 13, fontWeight: activeTab === level ? 700 : 500,
-                color: activeTab === level ? '#FF6B35' : '#AAA',
+                color: activeTab === level ? '#C0392B' : '#AAA',
                 cursor: 'pointer',
-                borderBottom: activeTab === level ? '2px solid #FF6B35' : '2px solid transparent',
+                borderBottom: activeTab === level ? '2px solid #C0392B' : '2px solid transparent',
                 marginBottom: -1,
                 transition: 'all 0.15s',
               }}>
@@ -216,12 +216,12 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
                   onClick={() => setSelectedRegionIds(prev => ({ ...prev, [activeTab]: r.id }))}
                   style={{
                     padding: '7px 14px', borderRadius: 99,
-                    background: isSelected ? '#FF6B35' : '#fff',
+                    background: isSelected ? '#C0392B' : '#fff',
                     border: isSelected ? 'none' : '1px solid #F0F0F0',
                     color: isSelected ? '#fff' : '#555',
                     fontSize: 12, fontWeight: isSelected ? 700 : 500,
                     cursor: 'pointer',
-                    boxShadow: isSelected ? '0 2px 8px rgba(255,107,53,0.3)' : '0 1px 4px rgba(0,0,0,0.04)',
+                    boxShadow: isSelected ? '0 2px 8px rgba(192,57,43,0.3)' : '0 1px 4px rgba(0,0,0,0.04)',
                   }}>
                   {r.name}
                 </button>
@@ -242,7 +242,7 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
         )}
 
         {!loading && error && (
-          <div style={{ padding: '16px', background: '#FFF0EB', border: '1px solid #FFCFBF', borderRadius: 16, color: '#FF6B35', fontSize: 13, textAlign: 'center' }}>
+          <div style={{ padding: '16px', background: '#FDECEA', border: '1px solid #F5B7B1', borderRadius: 16, color: '#C0392B', fontSize: 13, textAlign: 'center' }}>
             {error}
           </div>
         )}

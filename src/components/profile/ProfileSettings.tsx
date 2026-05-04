@@ -41,7 +41,7 @@ function Toggle({ value, onChange, label }: { value: boolean; onChange: (v: bool
       <button type="button" onClick={() => onChange(!value)}
         style={{
           width: 44, height: 26, borderRadius: 13,
-          background: value ? '#FF6B35' : '#E0E0E0',
+          background: value ? '#C0392B' : '#E0E0E0',
           border: 'none', cursor: 'pointer', position: 'relative',
           transition: 'background 0.2s',
         }}>
@@ -97,7 +97,7 @@ export function ProfileSettings({
 }: ProfileSettingsProps) {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
-  const [form, setForm] = useState<FormState>({ username: '', userColor: '#FF6B35', avatarUrl: '' })
+  const [form, setForm] = useState<FormState>({ username: '', userColor: '#C0392B', avatarUrl: '' })
   const [errors, setErrors] = useState<FormErrors>({})
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [saving, setSaving] = useState(false)
@@ -160,7 +160,7 @@ export function ProfileSettings({
   if (loading) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
-        <div style={{ width: 32, height: 32, borderRadius: '50%', border: '2.5px solid #FFE0D6', borderTopColor: '#FF6B35', animation: 'spin 0.8s linear infinite' }} />
+        <div style={{ width: 32, height: 32, borderRadius: '50%', border: '2.5px solid #FADBD8', borderTopColor: '#C0392B', animation: 'spin 0.8s linear infinite' }} />
       </div>
     )
   }
@@ -176,7 +176,7 @@ export function ProfileSettings({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
           <h1 style={{ fontSize: 22, fontWeight: 900, color: '#1A1A1A', margin: 0 }}>My Profile</h1>
           <button type="button" onClick={() => { setEditMode(!editMode); if (!editMode) setSuccess(null) }}
-            style={{ fontSize: 13, fontWeight: 600, color: '#FF6B35', background: 'none', border: 'none', cursor: 'pointer' }}>
+            style={{ fontSize: 13, fontWeight: 600, color: '#C0392B', background: 'none', border: 'none', cursor: 'pointer' }}>
             {editMode ? 'Cancel' : 'Edit Profile'}
           </button>
         </div>
@@ -205,7 +205,7 @@ export function ProfileSettings({
             <p style={{ fontSize: 12, color: '#AAA', margin: '0 0 6px', fontFamily: 'monospace' }}>{form.userColor}</p>
             <div style={{ display: 'flex', gap: 16 }}>
               <div>
-                <p style={{ fontSize: 16, fontWeight: 900, color: '#FF6B35', margin: 0, letterSpacing: '-0.02em' }}>{weeklyKm.toFixed(1)}</p>
+                <p style={{ fontSize: 16, fontWeight: 900, color: '#C0392B', margin: 0, letterSpacing: '-0.02em' }}>{weeklyKm.toFixed(1)}</p>
                 <p style={{ fontSize: 10, color: '#AAA', margin: 0, fontWeight: 600 }}>km minggu ini</p>
               </div>
               <div>
@@ -224,7 +224,7 @@ export function ProfileSettings({
             Edit Profil
           </p>
           <form onSubmit={handleSubmit} noValidate style={{ background: '#fff', borderTop: '1px solid #F5F5F5', borderBottom: '1px solid #F5F5F5', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
-            {errors.general && <div style={{ padding: '10px 14px', background: '#FFF0EB', border: '1px solid #FFCFBF', borderRadius: 12, color: '#FF6B35', fontSize: 13 }}>{errors.general}</div>}
+            {errors.general && <div style={{ padding: '10px 14px', background: '#FDECEA', border: '1px solid #F5B7B1', borderRadius: 12, color: '#C0392B', fontSize: 13 }}>{errors.general}</div>}
             {success && <div style={{ padding: '10px 14px', background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: 12, color: '#16A34A', fontSize: 13, fontWeight: 600 }}>✓ {success}</div>}
 
             {/* Username */}
@@ -233,32 +233,32 @@ export function ProfileSettings({
               <input type="text" value={form.username}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => { setForm(p => ({ ...p, username: e.target.value })); setErrors(p => ({ ...p, username: undefined })) }}
                 placeholder="jogger123" disabled={saving} maxLength={30}
-                style={{ width: '100%', padding: '12px 14px', background: '#F8F8F8', border: `1.5px solid ${errors.username ? '#FF6B35' : '#F0F0F0'}`, borderRadius: 12, fontSize: 14, color: '#1A1A1A', outline: 'none' }}
-                onFocus={e => e.target.style.borderColor = '#FF6B35'}
+                style={{ width: '100%', padding: '12px 14px', background: '#F8F8F8', border: `1.5px solid ${errors.username ? '#C0392B' : '#F0F0F0'}`, borderRadius: 12, fontSize: 14, color: '#1A1A1A', outline: 'none' }}
+                onFocus={e => e.target.style.borderColor = '#C0392B'}
                 onBlur={e => { if (!errors.username) e.target.style.borderColor = '#F0F0F0' }}
               />
-              {errors.username && <p style={{ fontSize: 11, color: '#FF6B35', margin: '4px 0 0' }}>{errors.username}</p>}
+              {errors.username && <p style={{ fontSize: 11, color: '#C0392B', margin: '4px 0 0' }}>{errors.username}</p>}
             </div>
 
             {/* Color */}
             <div>
               <label style={{ fontSize: 11, fontWeight: 700, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>Warna Wilayah</label>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <input type="color" value={isValidHexColor(form.userColor) ? form.userColor : '#FF6B35'}
+                <input type="color" value={isValidHexColor(form.userColor) ? form.userColor : '#C0392B'}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => { setForm(p => ({ ...p, userColor: e.target.value.toUpperCase() })); setErrors(p => ({ ...p, userColor: undefined })); setSuggestions([]) }}
                   disabled={saving}
                   style={{ width: 44, height: 44, padding: 3, background: '#F8F8F8', border: '1.5px solid #F0F0F0', borderRadius: 10, cursor: 'pointer' }}
                 />
                 <input type="text" value={form.userColor}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => { const v = e.target.value; setForm(p => ({ ...p, userColor: v.startsWith('#') ? v.toUpperCase() : `#${v.toUpperCase()}` })); setErrors(p => ({ ...p, userColor: undefined })); setSuggestions([]) }}
-                  placeholder="#FF6B35" maxLength={7} disabled={saving}
-                  style={{ flex: 1, padding: '12px 14px', background: '#F8F8F8', border: `1.5px solid ${errors.userColor ? '#FF6B35' : '#F0F0F0'}`, borderRadius: 12, fontSize: 14, color: '#1A1A1A', outline: 'none', fontFamily: 'monospace' }}
-                  onFocus={e => e.target.style.borderColor = '#FF6B35'}
+                  placeholder="#C0392B" maxLength={7} disabled={saving}
+                  style={{ flex: 1, padding: '12px 14px', background: '#F8F8F8', border: `1.5px solid ${errors.userColor ? '#C0392B' : '#F0F0F0'}`, borderRadius: 12, fontSize: 14, color: '#1A1A1A', outline: 'none', fontFamily: 'monospace' }}
+                  onFocus={e => e.target.style.borderColor = '#C0392B'}
                   onBlur={e => { if (!errors.userColor) e.target.style.borderColor = '#F0F0F0' }}
                 />
                 <div style={{ width: 36, height: 36, borderRadius: '50%', background: isValidHexColor(form.userColor) ? form.userColor : '#EEE', border: '2px solid #F0F0F0', flexShrink: 0 }} />
               </div>
-              {errors.userColor && <p style={{ fontSize: 11, color: '#FF6B35', margin: '4px 0 0' }}>{errors.userColor}</p>}
+              {errors.userColor && <p style={{ fontSize: 11, color: '#C0392B', margin: '4px 0 0' }}>{errors.userColor}</p>}
               {suggestions.length > 0 && (
                 <div style={{ marginTop: 8, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   {suggestions.map(c => (
@@ -280,9 +280,9 @@ export function ProfileSettings({
                   const sel = form.avatarUrl === av.id
                   return (
                     <button key={av.id} type="button" onClick={() => setForm(p => ({ ...p, avatarUrl: av.id }))} disabled={saving}
-                      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '10px 4px', background: sel ? '#FFF0EB' : '#F8F8F8', border: `1.5px solid ${sel ? '#FFCFBF' : '#F0F0F0'}`, borderRadius: 12, cursor: 'pointer' }}>
+                      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '10px 4px', background: sel ? '#FDECEA' : '#F8F8F8', border: `1.5px solid ${sel ? '#F5B7B1' : '#F0F0F0'}`, borderRadius: 12, cursor: 'pointer' }}>
                       <span style={{ fontSize: 24 }}>{av.emoji}</span>
-                      <span style={{ fontSize: 9, color: sel ? '#FF6B35' : '#AAA', fontWeight: sel ? 700 : 400 }}>{av.label}</span>
+                      <span style={{ fontSize: 9, color: sel ? '#C0392B' : '#AAA', fontWeight: sel ? 700 : 400 }}>{av.label}</span>
                     </button>
                   )
                 })}
@@ -290,7 +290,7 @@ export function ProfileSettings({
             </div>
 
             <button type="submit" disabled={saving}
-              style={{ padding: '14px', background: saving ? '#FFCFBF' : '#FF6B35', color: '#fff', border: 'none', borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: saving ? 'not-allowed' : 'pointer', boxShadow: saving ? 'none' : '0 4px 14px rgba(255,107,53,0.3)' }}>
+              style={{ padding: '14px', background: saving ? '#F5B7B1' : '#C0392B', color: '#fff', border: 'none', borderRadius: 14, fontSize: 15, fontWeight: 800, cursor: saving ? 'not-allowed' : 'pointer', boxShadow: saving ? 'none' : '0 4px 14px rgba(192,57,43,0.3)' }}>
               {saving ? 'Menyimpan...' : 'Simpan'}
             </button>
           </form>
@@ -328,7 +328,7 @@ export function ProfileSettings({
       {/* ── Sign out ── */}
       <div style={{ padding: '0 16px', marginTop: 8 }}>
         <button type="button" onClick={onSignOut}
-          style={{ width: '100%', padding: '14px', background: '#fff', color: '#FF6B35', border: '1.5px solid #FFCFBF', borderRadius: 14, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
+          style={{ width: '100%', padding: '14px', background: '#fff', color: '#C0392B', border: '1.5px solid #F5B7B1', borderRadius: 14, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
           Sign Out
         </button>
       </div>

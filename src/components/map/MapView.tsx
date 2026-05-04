@@ -34,7 +34,7 @@ export interface MapViewProps {
 }
 
 export function MapView({
-  territories, userPosition, userColor = '#FF6B35',
+  territories, userPosition, userColor = '#C0392B',
   runTrack, onViewportChange, className = '', isVisible = true,
 }: MapViewProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null)
@@ -323,13 +323,13 @@ export function MapView({
           boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
-            <span style={{ fontSize: 9, color: '#FF6B35', fontWeight: 700, letterSpacing: '0.1em' }}>LAT</span>
+            <span style={{ fontSize: 9, color: '#C0392B', fontWeight: 700, letterSpacing: '0.1em' }}>LAT</span>
             <span style={{ fontSize: 11, color: '#111', fontFamily: 'monospace', fontWeight: 600 }}>
               {displayCoords.lat.toFixed(6)}°
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ fontSize: 9, color: '#FF6B35', fontWeight: 700, letterSpacing: '0.1em' }}>LNG</span>
+            <span style={{ fontSize: 9, color: '#C0392B', fontWeight: 700, letterSpacing: '0.1em' }}>LNG</span>
             <span style={{ fontSize: 11, color: '#111', fontFamily: 'monospace', fontWeight: 600 }}>
               {displayCoords.lng.toFixed(6)}°
             </span>
@@ -342,13 +342,13 @@ export function MapView({
             background: 'rgba(255,255,255,0.92)',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255,107,53,0.2)',
+            border: '1px solid rgba(192,57,43,0.2)',
             borderRadius: 10,
             padding: '4px 10px',
             display: 'flex', alignItems: 'center', gap: 6,
             boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
           }}>
-            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6B35', boxShadow: '0 0 6px #FF6B35' }} />
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#C0392B', boxShadow: '0 0 6px #C0392B' }} />
             <span style={{ fontSize: 10, color: '#555', fontWeight: 600 }}>
               {territoryCount} wilayah
             </span>
@@ -389,10 +389,10 @@ export function MapView({
         <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', margin: '2px 0' }} />
 
         <button type="button" onClick={handleLocate}
-          style={{ ...ctrlBtn, color: userPosition ? '#FF6B35' : '#888', borderColor: userPosition ? 'rgba(255,107,53,0.3)' : 'rgba(0,0,0,0.1)' }}
+          style={{ ...ctrlBtn, color: userPosition ? '#C0392B' : '#888', borderColor: userPosition ? 'rgba(192,57,43,0.3)' : 'rgba(0,0,0,0.1)' }}
           aria-label="Lokasi saya"
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,107,53,0.5)' }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = userPosition ? 'rgba(255,107,53,0.3)' : 'rgba(0,0,0,0.1)' }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(192,57,43,0.5)' }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = userPosition ? 'rgba(192,57,43,0.3)' : 'rgba(0,0,0,0.1)' }}
         ><IconCrosshair size={17} /></button>
 
         <button type="button" style={ctrlBtn} aria-label="Kompas"
