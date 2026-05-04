@@ -287,29 +287,22 @@ export function IconLayers({ size = 24, color = 'currentColor', strokeWidth = 2 
 }
 
 // ─── Runner Illustration ─────────────────────────────────────────────────────
-// Stick figure lari — v4, analisa ulang dari screenshot
-// Problem: betis kiri+kanan bertemu di tengah → diamond
-// Fix: betis kanan ke kanan bawah, spread kaki lebih lebar
+// Path SVG dari user — runner icon bersih tanpa speed lines
 export function RunnerIllustration({ size = 40, color = '#C0392B' }: { size?: number; color?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-      stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      {/* Kepala — kanan atas */}
-      <circle cx="16" cy="3" r="2" fill={color} stroke="none"/>
-      {/* Badan condong: bahu(15,5) → pinggul(10,12) */}
-      <line x1="15" y1="5" x2="10" y2="12"/>
-      {/* Lengan kanan ke depan-bawah: (13,8) → (7,11) */}
-      <line x1="13" y1="8" x2="7" y2="11"/>
-      {/* Lengan kiri ke belakang-atas: (13,8) → (19,5) */}
-      <line x1="13" y1="8" x2="19" y2="5"/>
-      {/* Paha kiri ke depan: pinggul(10,12) → lutut(5,17) */}
-      <line x1="10" y1="12" x2="5" y2="17"/>
-      {/* Betis kiri ditekuk ke belakang: lutut(5,17) → kaki(8,22) */}
-      <line x1="5" y1="17" x2="8" y2="22"/>
-      {/* Paha kanan ke belakang: pinggul(10,12) → lutut(16,17) */}
-      <line x1="10" y1="12" x2="16" y2="17"/>
-      {/* Betis kanan ditekuk ke depan: lutut(16,17) → kaki(21,21) */}
-      <line x1="16" y1="17" x2="21" y2="21"/>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Kepala */}
+      <path d="M15 7C16.1046 7 17 6.10457 17 5C17 3.89543 16.1046 3 15 3C13.8954 3 13 3.89543 13 5C13 6.10457 13.8954 7 15 7Z"
+        stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      {/* Badan + kaki kiri */}
+      <path d="M12.6133 8.26691L9.30505 12.4021L13.4403 16.5374L11.3727 21.0861"
+        stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      {/* Lengan kiri + badan atas + kaki kanan */}
+      <path d="M6.4104 9.5075L9.79728 6.19931L12.6132 8.26692L15.508 11.5752H19.2297"
+        stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      {/* Lengan kanan */}
+      <path d="M8.89152 15.7103L7.65095 16.5374H4.34277"
+        stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   )
 }
