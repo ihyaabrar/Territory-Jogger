@@ -287,28 +287,29 @@ export function IconLayers({ size = 24, color = 'currentColor', strokeWidth = 2 
 }
 
 // ─── Runner Illustration ─────────────────────────────────────────────────────
-// Stick figure lari — koordinat terencana, tidak tumpang tindih
-// viewBox 24x24, postur: badan condong, kaki & tangan berlawanan
+// Stick figure lari — v4, analisa ulang dari screenshot
+// Problem: betis kiri+kanan bertemu di tengah → diamond
+// Fix: betis kanan ke kanan bawah, spread kaki lebih lebar
 export function RunnerIllustration({ size = 40, color = '#C0392B' }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
       stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      {/* Kepala */}
-      <circle cx="17" cy="4" r="2" fill={color} stroke="none"/>
-      {/* Badan: bahu (17,6) → pinggul (13,13) */}
-      <line x1="17" y1="6" x2="13" y2="13"/>
-      {/* Lengan kanan ke depan-bawah: bahu (16,8) → (11,12) */}
-      <line x1="16" y1="8" x2="11" y2="12"/>
-      {/* Lengan kiri ke belakang-atas: bahu (16,8) → (20,6) */}
-      <line x1="16" y1="8" x2="20" y2="6"/>
-      {/* Paha kiri ke depan: pinggul (13,13) → lutut (9,18) */}
-      <line x1="13" y1="13" x2="9" y2="18"/>
-      {/* Betis kiri ditekuk ke belakang: lutut (9,18) → kaki (12,22) */}
-      <line x1="9" y1="18" x2="12" y2="22"/>
-      {/* Paha kanan ke belakang: pinggul (13,13) → lutut (17,18) */}
-      <line x1="13" y1="13" x2="17" y2="18"/>
-      {/* Betis kanan ditekuk ke depan: lutut (17,18) → kaki (14,22) */}
-      <line x1="17" y1="18" x2="14" y2="22"/>
+      {/* Kepala — kanan atas */}
+      <circle cx="16" cy="3" r="2" fill={color} stroke="none"/>
+      {/* Badan condong: bahu(15,5) → pinggul(10,12) */}
+      <line x1="15" y1="5" x2="10" y2="12"/>
+      {/* Lengan kanan ke depan-bawah: (13,8) → (7,11) */}
+      <line x1="13" y1="8" x2="7" y2="11"/>
+      {/* Lengan kiri ke belakang-atas: (13,8) → (19,5) */}
+      <line x1="13" y1="8" x2="19" y2="5"/>
+      {/* Paha kiri ke depan: pinggul(10,12) → lutut(5,17) */}
+      <line x1="10" y1="12" x2="5" y2="17"/>
+      {/* Betis kiri ditekuk ke belakang: lutut(5,17) → kaki(8,22) */}
+      <line x1="5" y1="17" x2="8" y2="22"/>
+      {/* Paha kanan ke belakang: pinggul(10,12) → lutut(16,17) */}
+      <line x1="10" y1="12" x2="16" y2="17"/>
+      {/* Betis kanan ditekuk ke depan: lutut(16,17) → kaki(21,21) */}
+      <line x1="16" y1="17" x2="21" y2="21"/>
     </svg>
   )
 }
