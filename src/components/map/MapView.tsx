@@ -258,8 +258,18 @@ export function MapView({
     if (userPosition && mapRef.current) {
       mapRef.current.flyTo([userPosition.lat, userPosition.lng], 17, { duration: 0.8 })
     } else if (mapRef.current) {
-      // Request browser geolocation and fly to it
       mapRef.current.locate({ setView: true, maxZoom: 17 })
+    }
+  }
+  // Kompas: reset bearing ke utara (0°)
+  const handleCompass = () => {
+    if (mapRef.current) {
+      // Leaflet standard map tidak support bearing rotation
+      // Tapi kita bisa fly ke posisi saat ini dengan zoom yang sama untuk "reset"
+      // Untuk bearing rotation perlu leaflet-rotate plugin
+      // Sementara: fly ke lokasi user atau center dengan zoom reset
+      const center = mapRef.current.getCenter()
+      mapRef.current.flyTo(center, mapRef.current.getZoom(), { animate: true, duration: 0.5 })
     }
   }
 
@@ -395,7 +405,8 @@ export function MapView({
           onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = userPosition ? 'rgba(192,57,43,0.3)' : 'rgba(0,0,0,0.1)' }}
         ><IconCrosshair size={17} /></button>
 
-        <button type="button" style={ctrlBtn} aria-label="Kompas"
+        <button type="button" style={ctrlBtn} aria-label="Kompas — reset ke utara"
+          onClick={handleCompass}
           onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#111' }}
           onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#888' }}
         ><IconCompass size={17} /></button>
