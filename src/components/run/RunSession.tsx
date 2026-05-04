@@ -279,20 +279,20 @@ export function RunSession({
         bottom: 72,
         left: 0, right: 0,
         zIndex: 50,
-        padding: '0 12px 8px',
+        padding: '0 16px 10px',
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
         pointerEvents: 'none',
       }}>
         {/* Alerts */}
-        {speedWarn && <Alert color="#C0392B" bg="#FDECEA" border="#F5B7B1">🚗 Kecepatan terlalu tinggi — klaim dibatalkan</Alert>}
+        {speedWarn && <Alert color="#C0392B" bg="#FDECEA" border="#F5B7B1">Kecepatan terlalu tinggi — sesi dihentikan</Alert>}
         {claimMsg && <Alert color="#16A34A" bg="#F0FDF4" border="#BBF7D0">{claimMsg}</Alert>}
         {startErr && (
           <Alert color="#C0392B" bg="#FDECEA" border="#F5B7B1">
-            ⚠️ {startErr}
+            {startErr}
             {startErr.includes('ditolak') && (
-              <p style={{ fontSize: 11, marginTop: 4, opacity: 0.8 }}>
+              <p style={{ fontSize: 11, marginTop: 4, opacity: 0.8, fontWeight: 400 }}>
                 Buka Pengaturan Browser → Izin Lokasi → Izinkan
               </p>
             )}
@@ -303,136 +303,157 @@ export function RunSession({
         <div style={{
           pointerEvents: 'auto',
           background: '#FFFFFF',
-          borderRadius: minimized ? 99 : 24,
-          padding: minimized ? '12px 20px' : '20px 20px 16px',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-          border: '1px solid #F0F0F0',
-          transition: 'all 0.3s ease',
+          borderRadius: minimized ? 99 : 28,
+          padding: minimized ? '14px 20px' : '0',
+          boxShadow: '0 -4px 40px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06)',
+          border: '1px solid rgba(0,0,0,0.06)',
+          transition: 'border-radius 0.3s ease',
           overflow: 'hidden',
         }}>
-          {/* Minimize handle */}
-          <div
-            style={{ display: 'flex', justifyContent: 'center', marginBottom: minimized ? 0 : 12, cursor: 'pointer' }}
-            onClick={() => setMinimized(p => !p)}
-            role="button"
-            aria-label={minimized ? 'Perluas panel lari' : 'Perkecil panel lari'}
-            tabIndex={0}
-            onKeyDown={e => e.key === 'Enter' && setMinimized(p => !p)}
-          >
-            <div style={{ width: 36, height: 4, borderRadius: 2, background: '#E0E0E0' }} />
-          </div>
 
           {minimized ? (
             /* ── Mini bar ── */
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 {isRunning && (
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#C0392B', boxShadow: '0 0 8px #C0392B', animation: 'pulse-ring 1.5s ease-out infinite' }} />
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#C0392B', animation: 'pulse-ring 1.5s ease-out infinite' }} />
                 )}
-                <span style={{ fontSize: 16, fontWeight: 900, color: '#C0392B', letterSpacing: '-0.02em' }}>{dist.toFixed(2)} km</span>
-                <span style={{ fontSize: 13, color: '#AAA', fontWeight: 600 }}>{fmtDur(dur)}</span>
+                <span style={{ fontSize: 18, fontWeight: 900, color: '#C0392B', letterSpacing: '-0.03em' }}>{dist.toFixed(2)}</span>
+                <span style={{ fontSize: 13, color: '#AAA', fontWeight: 500 }}>km</span>
+                <span style={{ fontSize: 13, color: '#CCC' }}>·</span>
+                <span style={{ fontSize: 13, color: '#888', fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>{fmtDur(dur)}</span>
               </div>
-              {isRunning && (
-                <button type="button" onClick={() => void handleStop()}
-                  style={{ width: 36, height: 36, borderRadius: '50%', background: '#F0F0F0', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <rect x="2" y="2" width="4" height="10" rx="1.5" fill="#555" />
-                    <rect x="8" y="2" width="4" height="10" rx="1.5" fill="#555" />
-                  </svg>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <button type="button" onClick={() => setMinimized(false)}
+                  style={{ fontSize: 11, color: '#C0392B', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px' }}>
+                  Buka
                 </button>
-              )}
+                {isRunning && (
+                  <button type="button" onClick={() => void handleStop()}
+                    style={{ width: 34, height: 34, borderRadius: '50%', background: '#FDECEA', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <rect x="1.5" y="1.5" width="3.5" height="9" rx="1" fill="#C0392B"/>
+                      <rect x="7" y="1.5" width="3.5" height="9" rx="1" fill="#C0392B"/>
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
+
           ) : isRunning ? (
             /* ── Full running card ── */
-            <>
-              <div style={{ textAlign: 'center', marginBottom: 16 }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: '#AAA', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 4 }}>Distance</div>
+            <div>
+              {/* Drag handle */}
+              <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 12, paddingBottom: 4, cursor: 'pointer' }}
+                onClick={() => setMinimized(true)}>
+                <div style={{ width: 40, height: 4, borderRadius: 2, background: '#E8E8E8' }} />
+              </div>
+
+              {/* Status bar */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '8px 20px 0' }}>
+                <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#C0392B', animation: 'pulse-ring 1.5s ease-out infinite' }} />
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#C0392B', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Sedang Berlari</span>
+              </div>
+
+              {/* Big distance */}
+              <div style={{ textAlign: 'center', padding: '12px 20px 8px' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 52, fontWeight: 900, color: '#C0392B', letterSpacing: '-0.04em', lineHeight: 1 }}>{dist.toFixed(2)}</span>
-                  <span style={{ fontSize: 18, fontWeight: 700, color: '#AAA' }}>km</span>
+                  <span style={{ fontSize: 64, fontWeight: 900, color: '#C0392B', letterSpacing: '-0.04em', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+                    {dist.toFixed(2)}
+                  </span>
+                  <span style={{ fontSize: 20, fontWeight: 600, color: '#AAAAAA', marginBottom: 4 }}>km</span>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20, padding: '0 4px' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: 9, fontWeight: 600, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>Time</div>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: '#1A1A1A' }}>{fmtDur(dur)}</div>
-                </div>
-                <div style={{ width: 1, background: '#F0F0F0' }} />
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: 9, fontWeight: 600, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>Pace</div>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: '#1A1A1A' }}>{paceStr}<span style={{ fontSize: 10, color: '#AAA' }}>/km</span></div>
-                </div>
-                <div style={{ width: 1, background: '#F0F0F0' }} />
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: 9, fontWeight: 600, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>Kcal</div>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: '#1A1A1A' }}>{calories}</div>
-                </div>
-                <div style={{ width: 1, background: '#F0F0F0' }} />
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: 9, fontWeight: 600, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>Klaim</div>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: '#22C55E' }}>{claimed}</div>
-                </div>
+              {/* Stats row */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1px 1fr 1px 1fr 1px 1fr', alignItems: 'center', padding: '0 20px 20px', gap: 0 }}>
+                <StatCell label="Waktu" value={fmtDur(dur)} />
+                <div style={{ height: 32, background: '#F0F0F0' }} />
+                <StatCell label="Pace" value={paceStr} unit="/km" />
+                <div style={{ height: 32, background: '#F0F0F0' }} />
+                <StatCell label="Kalori" value={String(calories)} unit="kkal" />
+                <div style={{ height: 32, background: '#F0F0F0' }} />
+                <StatCell label="Klaim" value={String(claimed)} color="#16A34A" />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
+              {/* Stop button */}
+              <div style={{ padding: '0 20px 20px', display: 'flex', gap: 12 }}>
                 <button type="button" onClick={() => void handleStop()} aria-label="Selesai lari"
-                  style={{ width: 64, height: 64, borderRadius: '50%', background: '#F0F0F0', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.15s' }}>
-                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                    <rect x="4" y="3" width="5" height="16" rx="2" fill="#555" />
-                    <rect x="13" y="3" width="5" height="16" rx="2" fill="#555" />
+                  style={{
+                    flex: 1, height: 52, borderRadius: 16,
+                    background: '#1A1A1A', border: 'none',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                    cursor: 'pointer', transition: 'opacity 0.15s',
+                  }}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <rect x="2" y="2" width="5" height="12" rx="1.5" fill="white"/>
+                    <rect x="9" y="2" width="5" height="12" rx="1.5" fill="white"/>
                   </svg>
+                  <span style={{ fontSize: 15, fontWeight: 700, color: '#fff' }}>Selesai</span>
                 </button>
               </div>
-            </>
+            </div>
+
           ) : (
             /* ── Pre-run card ── */
-            <>
-              <div style={{ textAlign: 'center', marginBottom: 16 }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: '#AAA', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 4 }}>Distance</div>
+            <div>
+              {/* Drag handle */}
+              <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 12, paddingBottom: 4 }}>
+                <div style={{ width: 40, height: 4, borderRadius: 2, background: '#E8E8E8' }} />
+              </div>
+
+              {/* Big distance placeholder */}
+              <div style={{ textAlign: 'center', padding: '12px 20px 8px' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 52, fontWeight: 900, color: '#C0392B', letterSpacing: '-0.04em', lineHeight: 1 }}>00.00</span>
-                  <span style={{ fontSize: 18, fontWeight: 700, color: '#AAA' }}>km</span>
+                  <span style={{ fontSize: 64, fontWeight: 900, color: '#DDDDDD', letterSpacing: '-0.04em', lineHeight: 1 }}>
+                    0.00
+                  </span>
+                  <span style={{ fontSize: 20, fontWeight: 600, color: '#DDDDDD', marginBottom: 4 }}>km</span>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20, padding: '0 4px' }}>
-                {(['Time', 'Pace', 'Calories'] as const).map((l) => (
-                  <div key={l} style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: 9, fontWeight: 600, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>{l}</div>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: '#CCC' }}>—</div>
-                  </div>
-                ))}
+              {/* Stats placeholder */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1px 1fr 1px 1fr', alignItems: 'center', padding: '0 20px 20px', gap: 0 }}>
+                <StatCell label="Waktu" value="—" />
+                <div style={{ height: 32, background: '#F0F0F0' }} />
+                <StatCell label="Pace" value="—" />
+                <div style={{ height: 32, background: '#F0F0F0' }} />
+                <StatCell label="Kalori" value="—" />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
+              {/* Start button */}
+              <div style={{ padding: '0 20px 20px' }}>
                 <button
                   type="button"
                   onClick={() => void handleStart()}
                   disabled={isStarting}
                   aria-label="Mulai lari"
                   style={{
-                    width: 64, height: 64, borderRadius: '50%',
-                    background: isStarting ? '#F5B7B1' : '#C0392B',
-                    border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    width: '100%', height: 56, borderRadius: 18,
+                    background: isStarting ? '#E8A09A' : '#C0392B',
+                    border: 'none',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                     cursor: isStarting ? 'not-allowed' : 'pointer',
-                    boxShadow: isStarting ? 'none' : '0 4px 20px rgba(192,57,43,0.4)',
-                    transition: 'all 0.2s', position: 'relative',
+                    boxShadow: isStarting ? 'none' : '0 4px 20px rgba(192,57,43,0.35)',
+                    transition: 'all 0.2s',
                   }}
                 >
-                  {!isStarting && (
-                    <div style={{ position: 'absolute', inset: -4, borderRadius: '50%', border: '2px solid rgba(192,57,43,0.3)', animation: 'pulse-ring 2s ease-out infinite' }} />
-                  )}
                   {isStarting ? (
-                    <div style={{ width: 20, height: 20, borderRadius: '50%', border: '2.5px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', animation: 'spin 0.8s linear infinite' }} />
+                    <>
+                      <div style={{ width: 18, height: 18, borderRadius: '50%', border: '2.5px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', animation: 'spin 0.8s linear infinite' }} />
+                      <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>Memulai GPS...</span>
+                    </>
                   ) : (
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path d="M8 5L19 12L8 19V5Z" fill="white" />
-                    </svg>
+                    <>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M7 4L19 12L7 20V4Z" fill="white"/>
+                      </svg>
+                      <span style={{ fontSize: 16, fontWeight: 700, color: '#fff', letterSpacing: '0.01em' }}>Mulai Lari</span>
+                    </>
                   )}
                 </button>
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>
@@ -440,9 +461,26 @@ export function RunSession({
   )
 }
 
+// ─── StatCell — komponen stat kecil di run card ───────────────────────────────
+function StatCell({ label, value, unit, color = '#1A1A1A' }: { label: string; value: string; unit?: string; color?: string }) {
+  return (
+    <div style={{ textAlign: 'center', padding: '0 4px' }}>
+      <div style={{ fontSize: 10, fontWeight: 600, color: '#AAAAAA', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 4 }}>
+        {label}
+      </div>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 2 }}>
+        <span style={{ fontSize: 17, fontWeight: 800, color, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.02em' }}>
+          {value}
+        </span>
+        {unit && <span style={{ fontSize: 10, color: '#AAAAAA', fontWeight: 500 }}>{unit}</span>}
+      </div>
+    </div>
+  )
+}
+
 function Alert({ color, bg, border, children }: { color: string; bg: string; border: string; children: React.ReactNode }) {
   return (
-    <div role="alert" style={{ pointerEvents: 'auto', padding: '10px 16px', background: bg, border: `1px solid ${border}`, borderRadius: 12, color, fontSize: 13, fontWeight: 600, textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+    <div role="alert" style={{ pointerEvents: 'auto', padding: '10px 16px', background: bg, border: `1px solid ${border}`, borderRadius: 12, color, fontSize: 13, fontWeight: 600, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
       {children}
     </div>
   )
