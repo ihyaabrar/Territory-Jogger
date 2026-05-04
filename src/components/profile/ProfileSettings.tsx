@@ -104,8 +104,13 @@ export function ProfileSettings({
   const [success, setSuccess] = useState<string | null>(null)
   const [weeklyKm, setWeeklyKm] = useState(0)
   const [editMode, setEditMode] = useState(false)
-  const [showSpeed, setShowSpeed] = useState(true)
-  const [voicePrompt, setVoicePrompt] = useState(false)
+  // Persist UI preferences to localStorage
+  const [showSpeed, setShowSpeed] = useState(() => {
+    try { return localStorage.getItem('tj_showSpeed') !== 'false' } catch { return true }
+  })
+  const [voicePrompt, setVoicePrompt] = useState(() => {
+    try { return localStorage.getItem('tj_voicePrompt') === 'true' } catch { return false }
+  })
 
   useEffect(() => {
     let cancelled = false
@@ -301,10 +306,16 @@ export function ProfileSettings({
       {/* ── System section ── */}
       <Section title="System">
         <div style={{ padding: '0 20px', borderBottom: '1px solid #F5F5F5' }}>
-          <Toggle value={showSpeed} onChange={setShowSpeed} label="Show Current Speed" />
+          <Toggle value={showSpeed} onChange={(v) => {
+            setShowSpeed(v)
+            try { localStorage.setItem('tj_showSpeed', String(v)) } catch { /* ignore */ }
+          }} label="Show Current Speed" />
         </div>
         <div style={{ padding: '0 20px', borderBottom: '1px solid #F5F5F5' }}>
-          <Toggle value={voicePrompt} onChange={setVoicePrompt} label="Voice Prompt" />
+          <Toggle value={voicePrompt} onChange={(v) => {
+            setVoicePrompt(v)
+            try { localStorage.setItem('tj_voicePrompt', String(v)) } catch { /* ignore */ }
+          }} label="Voice Prompt" />
         </div>
         <RowItem label="Privacy Zone" onPress={onShowPrivacy} isLast />
       </Section>

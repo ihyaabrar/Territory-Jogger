@@ -111,32 +111,26 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'week' | 'month'>('all')
 
-  const loadSessions = useCallback(async () => {
+  const loadSessions = useCallback(async (f: 'all' | 'week' | 'month') => {
     setLoading(true)
     try {
-      const data = await getRecentSessions(userId, 50)
+      let since: Date | undefined
+      const now = new Date()
+      if (f === 'week') {
+        since = new Date(now)
+        since.setDate(now.getDate() - 7)
+      } else if (f === 'month') {
+        since = new Date(now)
+        since.setMonth(now.getMonth() - 1)
+      }
+      const data = await getRecentSessions(userId, 100, since)
       setSessions(data)
     } finally {
       setLoading(false)
     }
   }, [userId])
 
-  useEffect(() => { void loadSessions() }, [loadSessions])
-
-  const filtered = sessions.filter(s => {
-    if (filter === 'all') return true
-    const d = new Date(s.startedAt)
-    const now = new Date()
-    if (filter === 'week') {
-      const weekAgo = new Date(now); weekAgo.setDate(now.getDate() - 7)
-      return d >= weekAgo
-    }
-    if (filter === 'month') {
-      const monthAgo = new Date(now); monthAgo.setMonth(now.getMonth() - 1)
-      return d >= monthAgo
-    }
-    return true
-  })
+  useEffect(() => { void loadSessions(filter) }, [loadSessions, filter])
 
   return (
     <div style={{ background: '#F8F8F8', minHeight: '100%', paddingBottom: 16 }}>
@@ -144,7 +138,7 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
       {/* Header */}
       <div style={{ background: '#fff', padding: '16px 20px 14px', borderBottom: '1px solid #F5F5F5', marginBottom: 12 }}>
         <h1 style={{ fontSize: 22, fontWeight: 900, color: '#1A1A1A', margin: '0 0 4px', letterSpacing: '-0.02em' }}>My Walk List</h1>
-        <p style={{ fontSize: 13, color: '#AAA', margin: 0 }}>{sessions.length} aktivitas tercatat</p>
+        <p style={{ fontSize: 13, color: '#AAA', margin: 0 }}>{sessions.length} aktivitas{filter !== 'all' ? ` (${filter === 'week' ? '7 hari' : '30 hari'} terakhir)` : ' tercatat'}</p>
       </div>
 
       {/* Filter tabs */}
@@ -165,7 +159,7 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
       </div>
 
       {/* Total stats */}
-      {!loading && filtered.length > 0 && <TotalStats sessions={filtered} />}
+      {!loading && sessions.length > 0 && <TotalStats sessions={sessions} />}
 
       {/* Territory stat */}
       <div style={{ margin: '0 16px 12px', background: '#fff', borderRadius: 16, padding: '14px 16px', border: '1px solid #F5F5F5', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -188,14 +182,14 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
           Array.from({ length: 3 }).map((_, i) => (
             <div key={i} style={{ height: 120, background: '#fff', borderRadius: 20, border: '1px solid #F5F5F5', opacity: 1 - i * 0.2 }} />
           ))
-        ) : filtered.length === 0 ? (
+        ) : sessions.length === 0 ? (
           <div style={{ padding: '40px 16px', textAlign: 'center' }}>
             <p style={{ fontSize: 48, margin: '0 0 12px' }}>🏃</p>
             <p style={{ fontSize: 16, fontWeight: 800, color: '#1A1A1A', margin: '0 0 6px' }}>Belum ada aktivitas</p>
             <p style={{ fontSize: 13, color: '#AAA', margin: 0 }}>Mulai lari pertamamu!</p>
           </div>
         ) : (
-          filtered.map((s, i) => <ActivityCard key={s.id} session={s} index={i} />)
+          sessions.map((s, i) => <ActivityCard key={s.id} session={s} index={i} />)
         )}
       </div>
     </div>

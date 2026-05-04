@@ -20,7 +20,8 @@ interface DashboardProps {
 
 // ─── SVG Line Chart — Behance style (orange bars + line) ─────────────────────
 function WeeklyChart({ data, todayIdx }: { data: number[]; todayIdx: number }) {
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  // data is Mon=0...Sun=6, display Mon→Sun
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   const max = Math.max(...data, 0.1)
   const W = 300, H = 80, padX = 8, barW = 24, gap = (W - padX * 2 - barW * 7) / 6
 
@@ -173,11 +174,15 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
   useEffect(() => { void loadData() }, [loadData])
 
   const username = userProfile?.username ?? 'Runner'
+  // getWeeklyStats returns Mon=0...Sun=6, so convert getDay() (Sun=0) accordingly
   const rawDay = new Date().getDay()
-  const todayIdx = rawDay // Sun=0 ... Sat=6 (matches days array)
+  const todayIdx = rawDay === 0 ? 6 : rawDay - 1 // Mon=0, Sun=6
   const todayDist = weeklyStats.dailyDistanceKm[todayIdx] ?? 0
-  const todayKcal = estimateCalories(todayDist)
-  const todayMin = Math.round(todayDist * 8)
+  const todayKcal = estimateCalories(todayDist, weeklyStats.totalDurationSec > 0
+    ? Math.round((weeklyStats.totalDurationSec / Math.max(weeklyStats.sessionCount, 1)))
+    : undefined)
+  // Use actual duration from today's sessions if available
+  const todayMin = Math.round(todayDist > 0 ? todayDist * 8 : 0)
 
   return (
     <div style={{ background: '#F8F8F8', minHeight: '100%', paddingBottom: 16 }}>
@@ -312,13 +317,13 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
       {/* ── CTA buttons like Behance ── */}
       {recentSessions.length > 0 && (
         <div style={{ padding: '12px 16px 0', display: 'flex', gap: 10 }}>
-          <button type="button" onClick={() => onNavigate('map')}
+          <button type="button" onClick={() => onNavigate('history')}
             style={{ flex: 1, padding: '13px', background: '#FF6B35', color: '#fff', border: 'none', borderRadius: 14, fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(255,107,53,0.3)' }}>
-            Distance Charts
+            Lihat Riwayat
           </button>
-          <button type="button" onClick={() => onNavigate('leaderboard')}
+          <button type="button" onClick={() => onNavigate('map')}
             style={{ flex: 1, padding: '13px', background: '#fff', color: '#FF6B35', border: '2px solid #FF6B35', borderRadius: 14, fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-            My Walk List
+            Buka Peta
           </button>
         </div>
       )}

@@ -22,11 +22,13 @@ export interface MapViewProps {
   runTrack?: Feature<LineString> | null
   onViewportChange?: (bounds: { minLng: number; minLat: number; maxLng: number; maxLat: number }) => void
   className?: string
+  /** When true, calls map.invalidateSize() to fix tiles after visibility change */
+  isVisible?: boolean
 }
 
 export function MapView({
   territories, userPosition, userColor = '#FF6B35',
-  runTrack, onViewportChange, className = '',
+  runTrack, onViewportChange, className = '', isVisible = true,
 }: MapViewProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<LeafletMap | null>(null)
@@ -129,6 +131,16 @@ export function MapView({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // ─── Invalidate size when map becomes visible ──────────────────────────────
+  useEffect(() => {
+    if (!isVisible || !mapRef.current) return
+    // Delay slightly to let CSS visibility/display apply before measuring
+    const t = setTimeout(() => {
+      mapRef.current?.invalidateSize({ animate: false })
+    }, 60)
+    return () => clearTimeout(t)
+  }, [isVisible])
 
   // ─── Update territories ────────────────────────────────────────────────────
   const updateTerritories = useCallback(async (newTerritories: Territory[]) => {

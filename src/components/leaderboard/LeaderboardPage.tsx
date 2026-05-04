@@ -1,6 +1,7 @@
 /**
  * LeaderboardPage — Behance Running App Style
  * Activities Analyze screen
+ * Fix: region selector so leaderboard can actually show data
  */
 
 import { useState, useEffect, useCallback } from 'react'
@@ -18,6 +19,26 @@ const TABS: { level: LeaderboardLevel; label: string }[] = [
   { level: 'kecamatan', label: 'Kecamatan' },
   { level: 'kota', label: 'Kota' },
 ]
+
+// Demo region IDs — in production these would come from a geo-lookup API
+// or user profile. For now we provide a simple text input.
+const DEMO_REGIONS: Record<LeaderboardLevel, Array<{ id: string; name: string }>> = {
+  kelurahan: [
+    { id: 'kel-001', name: 'Malioboro' },
+    { id: 'kel-002', name: 'Prawirodirjan' },
+    { id: 'kel-003', name: 'Ngampilan' },
+  ],
+  kecamatan: [
+    { id: 'kec-001', name: 'Gedongtengen' },
+    { id: 'kec-002', name: 'Gondomanan' },
+    { id: 'kec-003', name: 'Kraton' },
+  ],
+  kota: [
+    { id: 'kota-001', name: 'Yogyakarta' },
+    { id: 'kota-002', name: 'Sleman' },
+    { id: 'kota-003', name: 'Bantul' },
+  ],
+}
 
 function resolveEmoji(avatarUrl: string): string {
   const found = AVAILABLE_AVATARS.find(a => a.id === avatarUrl)
@@ -92,8 +113,10 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
   const [entries, setEntries] = useState<LeaderboardEntry[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // Allow user to select a region manually
+  const [selectedRegionIds, setSelectedRegionIds] = useState<Partial<Record<LeaderboardLevel, string>>>(regionIds)
 
-  const regionId = regionIds[activeTab]
+  const regionId = selectedRegionIds[activeTab]
   const myRank = entries.find(e => e.userId === userId)?.rank
 
   const handleData = useCallback((data: LeaderboardEntry[]) => { setEntries(data); setLoading(false); setError(null) }, [])
@@ -104,6 +127,8 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
     setLoading(true); setError(null); setEntries([])
     return startLeaderboardPolling(activeTab, regionId, handleData, handleError)
   }, [activeTab, regionId, handleData, handleError])
+
+  const availableRegions = DEMO_REGIONS[activeTab]
 
   return (
     <div style={{ background: '#F8F8F8', minHeight: '100%', paddingBottom: 16 }}>
@@ -124,7 +149,7 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
         </div>
       </div>
 
-      {/* Period tabs — Day | Week | Month | Year style */}
+      {/* Level tabs */}
       <div style={{ background: '#fff', padding: '0 20px 14px', borderBottom: '1px solid #F5F5F5', marginBottom: 12 }}>
         <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid #F0F0F0' }}>
           {TABS.map(({ level, label }) => (
@@ -142,6 +167,33 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
               {label}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Region selector */}
+      <div style={{ padding: '0 16px', marginBottom: 12 }}>
+        <p style={{ fontSize: 11, fontWeight: 700, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 8px' }}>
+          Pilih {activeTab}
+        </p>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {availableRegions.map(r => {
+            const isSelected = selectedRegionIds[activeTab] === r.id
+            return (
+              <button key={r.id} type="button"
+                onClick={() => setSelectedRegionIds(prev => ({ ...prev, [activeTab]: r.id }))}
+                style={{
+                  padding: '7px 14px', borderRadius: 99,
+                  background: isSelected ? '#FF6B35' : '#fff',
+                  border: isSelected ? 'none' : '1px solid #F0F0F0',
+                  color: isSelected ? '#fff' : '#555',
+                  fontSize: 12, fontWeight: isSelected ? 700 : 500,
+                  cursor: 'pointer',
+                  boxShadow: isSelected ? '0 2px 8px rgba(255,107,53,0.3)' : '0 1px 4px rgba(0,0,0,0.04)',
+                }}>
+                {r.name}
+              </button>
+            )
+          })}
         </div>
       </div>
 
@@ -164,7 +216,7 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
         {!loading && !error && !regionId && (
           <div style={{ padding: '40px 16px', textAlign: 'center' }}>
             <p style={{ fontSize: 40, margin: '0 0 12px' }}>🏆</p>
-            <p style={{ fontSize: 15, fontWeight: 700, color: '#1A1A1A', margin: '0 0 6px' }}>Pilih wilayah {activeTab}</p>
+            <p style={{ fontSize: 15, fontWeight: 700, color: '#1A1A1A', margin: '0 0 6px' }}>Pilih wilayah di atas</p>
             <p style={{ fontSize: 13, color: '#AAA', margin: 0 }}>untuk melihat peringkat di area kamu</p>
           </div>
         )}

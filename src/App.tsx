@@ -25,6 +25,8 @@ import { getProfile } from './services/profileService'
 import {
   IconHome, IconMap, IconTrophy, IconUser,
 } from './components/ui/Icons'
+import { gpsTracker } from './services/gpsTracker'
+import { isSupabaseConfigured } from './lib/supabase'
 import type { ViewportBBox } from './services/territoryService'
 import type { UserProfile } from './types/index'
 
@@ -67,8 +69,8 @@ function AppContent() {
     handleViewportChange(bounds)
   }, [handleViewportChange])
 
-  const handlePositionUpdate = useCallback((position: { lat: number; lng: number } | undefined) => {
-    setUserPosition(position ?? null)
+  const handlePositionUpdate = useCallback((position: { lat: number; lng: number } | null) => {
+    setUserPosition(position)
   }, [])
 
   const handleTrackUpdate = useCallback((track: Feature<LineString> | null) => {
@@ -82,6 +84,18 @@ function AppContent() {
       setRunTrack(null)
     }
   }, [])
+
+  const handleSignOut = useCallback(async () => {
+    // Stop GPS session if active before signing out
+    if (gpsTracker._isSessionActive) {
+      try { await gpsTracker.stopSession() } catch { /* ignore */ }
+    }
+    setUserPosition(null)
+    setRunTrack(null)
+    setIsRunning(false)
+    setActivePage('home')
+    await signOut()
+  }, [signOut])
 
   const handleProfileSaved = useCallback((profile: UserProfile) => {
     setUserProfile(profile)
@@ -103,6 +117,24 @@ function AppContent() {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 12, background: 'var(--color-bg)' }}>
         <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid rgba(255,107,53,0.15)', borderTopColor: '#FF6B35', animation: 'spin 0.8s linear infinite' }} />
         <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Memuat...</p>
+      </div>
+    )
+  }
+
+  // ─── Missing env vars ──────────────────────────────────────────────────────
+  if (!isSupabaseConfigured) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16, background: '#F8F8F8', padding: 24 }}>
+        <span style={{ fontSize: 48 }}>⚙️</span>
+        <h2 style={{ fontSize: 20, fontWeight: 900, color: '#1A1A1A', margin: 0, textAlign: 'center' }}>Konfigurasi Diperlukan</h2>
+        <p style={{ fontSize: 14, color: '#888', textAlign: 'center', maxWidth: 320, lineHeight: 1.6 }}>
+          Salin file <code style={{ background: '#F0F0F0', padding: '2px 6px', borderRadius: 4 }}>.env.example</code> ke{' '}
+          <code style={{ background: '#F0F0F0', padding: '2px 6px', borderRadius: 4 }}>.env</code> dan isi dengan kredensial Supabase kamu.
+        </p>
+        <div style={{ background: '#fff', borderRadius: 12, padding: '12px 16px', border: '1px solid #F0F0F0', fontFamily: 'monospace', fontSize: 12, color: '#555', width: '100%', maxWidth: 320 }}>
+          VITE_SUPABASE_URL=https://xxx.supabase.co<br />
+          VITE_SUPABASE_ANON_KEY=eyJ...
+        </div>
       </div>
     )
   }
@@ -176,6 +208,7 @@ function AppContent() {
           userColor={userColor}
           runTrack={runTrack}
           onViewportChange={handleViewportChangeWrapper}
+          isVisible={activePage === 'map'}
         />
       </div>
 
@@ -225,7 +258,7 @@ function AppContent() {
               userId={user.id}
               onSaved={handleProfileSaved}
               totalTerritoryKm2={totalTerritoryKm2}
-              onSignOut={() => void signOut()}
+              onSignOut={() => void handleSignOut()}
               onShowNotifications={() => setShowNotifications(true)}
               onShowPrivacy={() => setShowPrivacy(true)}
               unreadCount={unreadCount}

@@ -127,15 +127,25 @@ export async function getWeeklyStats(userId: string): Promise<WeeklyStats> {
 }
 
 /**
- * Ambil sesi lari terbaru untuk activity feed
+ * Ambil sesi lari terbaru untuk activity feed, dengan filter tanggal opsional
  */
-export async function getRecentSessions(userId: string, limit = 5): Promise<RunSessionRecord[]> {
-  const { data, error } = await supabase
+export async function getRecentSessions(
+  userId: string,
+  limit = 5,
+  since?: Date,
+): Promise<RunSessionRecord[]> {
+  let query = supabase
     .from('run_sessions')
     .select('id, user_id, distance_km, duration_sec, started_at, ended_at')
     .eq('user_id', userId)
     .order('started_at', { ascending: false })
     .limit(limit)
+
+  if (since) {
+    query = query.gte('started_at', since.toISOString())
+  }
+
+  const { data, error } = await query
 
   if (error || !data) return []
 

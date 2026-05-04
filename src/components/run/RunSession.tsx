@@ -3,6 +3,7 @@
  * - Minimizable card (swipe down = mini bar, swipe up = full)
  * - Post-run summary setelah selesai
  * - GPS marker fix
+ * - Bug fixes: type safety, distance calc, GPS singleton reset
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -22,7 +23,8 @@ export interface RunSessionProps {
   userColor: string
   username: string
   privacyZones?: PrivacyZone[]
-  onPositionUpdate?: (position: { lat: number; lng: number }) => void
+  /** null = clear marker from map */
+  onPositionUpdate?: (position: { lat: number; lng: number } | null) => void
   onTrackUpdate?: (track: Feature<LineString> | null) => void
   onSessionChange?: (isRunning: boolean) => void
   latestInvasion?: InvasionNotification | null
@@ -32,13 +34,30 @@ export interface RunSessionProps {
 
 function coordsToLineString(coords: Coordinate[]): Feature<LineString> | null {
   if (coords.length < 2) return null
-  return { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: coords.map(c => [c.lng, c.lat]) } }
+  return {
+    type: 'Feature',
+    properties: {},
+    geometry: { type: 'LineString', coordinates: coords.map(c => [c.lng, c.lat]) },
+  }
+}
+
+/** Haversine distance between two coords in km */
+function haversineKm(a: Coordinate, b: Coordinate): number {
+  const R = 6371
+  const dLat = (b.lat - a.lat) * Math.PI / 180
+  const dLng = (b.lng - a.lng) * Math.PI / 180
+  const x =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLng / 2) ** 2
+  return 2 * R * Math.asin(Math.sqrt(x))
 }
 
 function fmtDur(sec: number): string {
-  const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60
-  if (h > 0) return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
-  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+  const h = Math.floor(sec / 3600)
+  const m = Math.floor((sec % 3600) / 60)
+  const s = sec % 60
+  if (h > 0) return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
 export function RunSession({
@@ -65,17 +84,24 @@ export function RunSession({
   const claimTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const startTimeRef = useRef<Date | null>(null)
   const lastTrackRef = useRef<Feature<LineString> | null>(null)
+  // Accumulate distance incrementally to avoid re-computing full track each update
+  const distRef = useRef(0)
 
   const applyClaimResult = useTerritoryStore(s => s.applyClaimResult)
   const addPendingClaim = useTerritoryStore(s => s.addPendingClaim)
 
-  // Sync dengan GPS tracker saat mount
+  // Sync with GPS tracker on mount (handles page navigation back to map)
   useEffect(() => {
     if (gpsTracker._isSessionActive) {
       setIsRunning(true)
       onSessionChange?.(true)
       gpsTracker.onPositionUpdate(coord => {
+        const prev = coordsRef.current[coordsRef.current.length - 1]
         coordsRef.current.push(coord)
+        if (prev) {
+          distRef.current += haversineKm(prev, coord)
+          setDist(distRef.current)
+        }
         onPositionUpdate?.({ lat: coord.lat, lng: coord.lng })
         const track = coordsToLineString(coordsRef.current)
         lastTrackRef.current = track
@@ -87,7 +113,7 @@ export function RunSession({
       if (timerRef.current) clearInterval(timerRef.current)
       if (claimTimerRef.current) clearTimeout(claimTimerRef.current)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const processClaim = useCallback(async (coords: Coordinate[]) => {
@@ -107,44 +133,62 @@ export function RunSession({
   }, [userId, userColor, username, privacyZones, addPendingClaim, applyClaimResult])
 
   const handleStart = useCallback(async () => {
+    // If tracker already active (e.g. navigated away and back), just resume UI
     if (gpsTracker._isSessionActive) {
-      setIsRunning(true); onSessionChange?.(true)
+      setIsRunning(true)
+      onSessionChange?.(true)
       if (!timerRef.current) timerRef.current = setInterval(() => setDur(p => p + 1), 1000)
       return
     }
-    setIsStarting(true); setStartErr(null); setSpeedWarn(false); setClaimMsg(null)
-    setDur(0); setDist(0); setClaimed(0)
-    coordsRef.current = []; lastTrackRef.current = null
+
+    setIsStarting(true)
+    setStartErr(null)
+    setSpeedWarn(false)
+    setClaimMsg(null)
+    setDur(0)
+    setDist(0)
+    setClaimed(0)
+    coordsRef.current = []
+    distRef.current = 0
+    lastTrackRef.current = null
 
     try {
       gpsTracker.onPositionUpdate(coord => {
+        const prev = coordsRef.current[coordsRef.current.length - 1]
         coordsRef.current.push(coord)
+        // Incremental distance — avoids re-summing entire array each update
+        if (prev) {
+          distRef.current += haversineKm(prev, coord)
+          setDist(distRef.current)
+        }
         onPositionUpdate?.({ lat: coord.lat, lng: coord.lng })
         const track = coordsToLineString(coordsRef.current)
         lastTrackRef.current = track
         onTrackUpdate?.(track)
-        const cs = coordsRef.current
-        if (cs.length >= 2) {
-          const a = cs[cs.length-1], b = cs[cs.length-2]
-          const dLat = (a.lat-b.lat)*Math.PI/180, dLng = (a.lng-b.lng)*Math.PI/180
-          const x = Math.sin(dLat/2)**2 + Math.cos(b.lat*Math.PI/180)*Math.cos(a.lat*Math.PI/180)*Math.sin(dLng/2)**2
-          setDist(p => p + 2*6371*Math.asin(Math.sqrt(x)))
-        }
         void processClaim(coordsRef.current)
       })
+
       gpsTracker.onSpeedViolation(() => {
-        setSpeedWarn(true); setIsRunning(false); onSessionChange?.(false)
-        onTrackUpdate?.(null); onPositionUpdate?.(undefined as unknown as { lat: number; lng: number })
+        setSpeedWarn(true)
+        setIsRunning(false)
+        onSessionChange?.(false)
+        onTrackUpdate?.(null)
+        onPositionUpdate?.(null)
         if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null }
       })
-      gpsTracker.onGPSLost(() => {})
+
+      gpsTracker.onGPSLost(() => {
+        // GPS lost — keep session alive, just show no position
+        onPositionUpdate?.(null)
+      })
 
       await gpsTracker.startSession()
-      setIsRunning(true); onSessionChange?.(true)
+      setIsRunning(true)
+      onSessionChange?.(true)
       startTimeRef.current = new Date()
       timerRef.current = setInterval(() => setDur(p => p + 1), 1000)
     } catch (err) {
-      setStartErr(err instanceof Error ? err.message : 'Gagal memulai')
+      setStartErr(err instanceof Error ? err.message : 'Gagal memulai GPS')
     } finally {
       setIsStarting(false)
     }
@@ -153,26 +197,34 @@ export function RunSession({
   const handleStop = useCallback(async () => {
     const end = new Date()
     const start = startTimeRef.current ?? new Date()
-    const fd = dist, fDur = dur, fClaimed = claimed
+    const fd = distRef.current
+    const fDur = dur
+    const fClaimed = claimed
     const finalTrack = lastTrackRef.current
 
     try { await gpsTracker.stopSession() } catch { /* ignore */ }
 
-    setIsRunning(false); onSessionChange?.(false)
+    setIsRunning(false)
+    onSessionChange?.(false)
     onTrackUpdate?.(null)
-    // PENTING: jangan hapus userPosition saat stop — biarkan titik tetap di peta
-    // onPositionUpdate?.(undefined) — DIHAPUS agar titik tetap muncul
+    // Keep userPosition on map after stop so user can see where they finished
 
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null }
     coordsRef.current = []
+    distRef.current = 0
     startTimeRef.current = null
 
     if (fd > 0.01 && fDur > 10) void saveRunSession(userId, fd, fDur, start, end)
 
-    // Tampilkan post-run summary
-    setSummaryData({ dist: fd, dur: fDur, kcal: estimateCalories(fd, fDur), claimed: fClaimed, track: finalTrack })
+    setSummaryData({
+      dist: fd,
+      dur: fDur,
+      kcal: estimateCalories(fd, fDur),
+      claimed: fClaimed,
+      track: finalTrack,
+    })
     setShowSummary(true)
-  }, [onSessionChange, onTrackUpdate, userId, dist, dur, claimed])
+  }, [onSessionChange, onTrackUpdate, userId, dur, claimed])
 
   const calories = estimateCalories(dist, dur)
 
@@ -218,7 +270,16 @@ export function RunSession({
         {/* Alerts */}
         {speedWarn && <Alert color="#FF6B35" bg="#FFF0EB" border="#FFCFBF">🚗 Kecepatan terlalu tinggi — klaim dibatalkan</Alert>}
         {claimMsg && <Alert color="#16A34A" bg="#F0FDF4" border="#BBF7D0">{claimMsg}</Alert>}
-        {startErr && <Alert color="#FF6B35" bg="#FFF0EB" border="#FFCFBF">⚠️ {startErr}</Alert>}
+        {startErr && (
+          <Alert color="#FF6B35" bg="#FFF0EB" border="#FFCFBF">
+            ⚠️ {startErr}
+            {startErr.includes('ditolak') && (
+              <p style={{ fontSize: 11, marginTop: 4, opacity: 0.8 }}>
+                Buka Pengaturan Browser → Izin Lokasi → Izinkan
+              </p>
+            )}
+          </Alert>
+        )}
 
         {/* Main card */}
         <div style={{
@@ -232,8 +293,14 @@ export function RunSession({
           overflow: 'hidden',
         }}>
           {/* Minimize handle */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: minimized ? 0 : 12, cursor: 'pointer' }}
-            onClick={() => setMinimized(p => !p)}>
+          <div
+            style={{ display: 'flex', justifyContent: 'center', marginBottom: minimized ? 0 : 12, cursor: 'pointer' }}
+            onClick={() => setMinimized(p => !p)}
+            role="button"
+            aria-label={minimized ? 'Perluas panel lari' : 'Perkecil panel lari'}
+            tabIndex={0}
+            onKeyDown={e => e.key === 'Enter' && setMinimized(p => !p)}
+          >
             <div style={{ width: 36, height: 4, borderRadius: 2, background: '#E0E0E0' }} />
           </div>
 
@@ -241,7 +308,9 @@ export function RunSession({
             /* ── Mini bar ── */
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF6B35', boxShadow: '0 0 8px #FF6B35', animation: 'pulse-ring 1.5s ease-out infinite' }} />
+                {isRunning && (
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF6B35', boxShadow: '0 0 8px #FF6B35', animation: 'pulse-ring 1.5s ease-out infinite' }} />
+                )}
                 <span style={{ fontSize: 16, fontWeight: 900, color: '#FF6B35', letterSpacing: '-0.02em' }}>{dist.toFixed(2)} km</span>
                 <span style={{ fontSize: 13, color: '#AAA', fontWeight: 600 }}>{fmtDur(dur)}</span>
               </div>
@@ -249,8 +318,8 @@ export function RunSession({
                 <button type="button" onClick={() => void handleStop()}
                   style={{ width: 36, height: 36, borderRadius: '50%', background: '#F0F0F0', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <rect x="2" y="2" width="4" height="10" rx="1.5" fill="#555"/>
-                    <rect x="8" y="2" width="4" height="10" rx="1.5" fill="#555"/>
+                    <rect x="2" y="2" width="4" height="10" rx="1.5" fill="#555" />
+                    <rect x="8" y="2" width="4" height="10" rx="1.5" fill="#555" />
                   </svg>
                 </button>
               )}
@@ -287,8 +356,8 @@ export function RunSession({
                 <button type="button" onClick={() => void handleStop()} aria-label="Selesai lari"
                   style={{ width: 64, height: 64, borderRadius: '50%', background: '#F0F0F0', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.15s' }}>
                   <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                    <rect x="4" y="3" width="5" height="16" rx="2" fill="#555"/>
-                    <rect x="13" y="3" width="5" height="16" rx="2" fill="#555"/>
+                    <rect x="4" y="3" width="5" height="16" rx="2" fill="#555" />
+                    <rect x="13" y="3" width="5" height="16" rx="2" fill="#555" />
                   </svg>
                 </button>
               </div>
@@ -305,16 +374,20 @@ export function RunSession({
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20, padding: '0 4px' }}>
-                {[['Time', '00:00m'], ['Speed', '00:00km/h'], ['Calories', '0kcal']].map(([l, v]) => (
+                {(['Time', 'Speed', 'Calories'] as const).map((l) => (
                   <div key={l} style={{ textAlign: 'center' }}>
                     <div style={{ fontSize: 9, fontWeight: 600, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>{l}</div>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: '#CCC' }}>{v}</div>
+                    <div style={{ fontSize: 14, fontWeight: 800, color: '#CCC' }}>—</div>
                   </div>
                 ))}
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <button type="button" onClick={() => void handleStart()} disabled={isStarting} aria-label="Mulai lari"
+                <button
+                  type="button"
+                  onClick={() => void handleStart()}
+                  disabled={isStarting}
+                  aria-label="Mulai lari"
                   style={{
                     width: 64, height: 64, borderRadius: '50%',
                     background: isStarting ? '#FFCFBF' : '#FF6B35',
@@ -322,13 +395,18 @@ export function RunSession({
                     cursor: isStarting ? 'not-allowed' : 'pointer',
                     boxShadow: isStarting ? 'none' : '0 4px 20px rgba(255,107,53,0.4)',
                     transition: 'all 0.2s', position: 'relative',
-                  }}>
+                  }}
+                >
                   {!isStarting && (
                     <div style={{ position: 'absolute', inset: -4, borderRadius: '50%', border: '2px solid rgba(255,107,53,0.3)', animation: 'pulse-ring 2s ease-out infinite' }} />
                   )}
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M8 5L19 12L8 19V5Z" fill="white"/>
-                  </svg>
+                  {isStarting ? (
+                    <div style={{ width: 20, height: 20, borderRadius: '50%', border: '2.5px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', animation: 'spin 0.8s linear infinite' }} />
+                  ) : (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M8 5L19 12L8 19V5Z" fill="white" />
+                    </svg>
+                  )}
                 </button>
               </div>
             </>
