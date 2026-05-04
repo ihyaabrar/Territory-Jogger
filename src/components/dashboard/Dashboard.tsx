@@ -178,11 +178,10 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
   const rawDay = new Date().getDay()
   const todayIdx = rawDay === 0 ? 6 : rawDay - 1 // Mon=0, Sun=6
   const todayDist = weeklyStats.dailyDistanceKm[todayIdx] ?? 0
-  const todayKcal = estimateCalories(todayDist, weeklyStats.totalDurationSec > 0
-    ? Math.round((weeklyStats.totalDurationSec / Math.max(weeklyStats.sessionCount, 1)))
-    : undefined)
-  // Use actual duration from today's sessions if available
-  const todayMin = Math.round(todayDist > 0 ? todayDist * 8 : 0)
+  // Estimate today's calories from today's distance only (not weekly average)
+  const todayKcal = estimateCalories(todayDist)
+  // Estimate today's time: assume ~8 min/km pace
+  const todayMin = Math.round(todayDist * 8)
 
   return (
     <div style={{ background: '#F8F8F8', minHeight: '100%', paddingBottom: 16 }}>

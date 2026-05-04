@@ -78,7 +78,6 @@ export function RunSession({
   const [summaryData, setSummaryData] = useState<{
     dist: number; dur: number; kcal: number; claimed: number; track: Feature<LineString> | null
   } | null>(null)
-
   const coordsRef = useRef<Coordinate[]>([])
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const claimTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -86,6 +85,9 @@ export function RunSession({
   const lastTrackRef = useRef<Feature<LineString> | null>(null)
   // Accumulate distance incrementally to avoid re-computing full track each update
   const distRef = useRef(0)
+  // Throttle processClaim: only run every 5 new GPS points to avoid O(n²) on long runs
+  const claimCheckCounterRef = useRef(0)
+  const CLAIM_CHECK_INTERVAL = 5
 
   const applyClaimResult = useTerritoryStore(s => s.applyClaimResult)
   const addPendingClaim = useTerritoryStore(s => s.addPendingClaim)
@@ -150,6 +152,7 @@ export function RunSession({
     setClaimed(0)
     coordsRef.current = []
     distRef.current = 0
+    claimCheckCounterRef.current = 0
     lastTrackRef.current = null
 
     try {
@@ -165,7 +168,11 @@ export function RunSession({
         const track = coordsToLineString(coordsRef.current)
         lastTrackRef.current = track
         onTrackUpdate?.(track)
-        void processClaim(coordsRef.current)
+        // Throttle claim detection: only check every N points to avoid O(n²) on long runs
+        claimCheckCounterRef.current++
+        if (claimCheckCounterRef.current % CLAIM_CHECK_INTERVAL === 0) {
+          void processClaim(coordsRef.current)
+        }
       })
 
       gpsTracker.onSpeedViolation(() => {
@@ -227,6 +234,13 @@ export function RunSession({
   }, [onSessionChange, onTrackUpdate, userId, dur, claimed])
 
   const calories = estimateCalories(dist, dur)
+  // Pace in min/km — only meaningful after some distance
+  const paceStr = dist > 0.05 && dur > 0
+    ? (() => {
+        const secPerKm = dur / dist
+        return `${String(Math.floor(secPerKm / 60)).padStart(2, '0')}:${String(Math.floor(secPerKm % 60)).padStart(2, '0')}`
+      })()
+    : '--:--'
 
   // ─── Post-run summary ──────────────────────────────────────────────────────
   if (showSummary && summaryData) {
@@ -342,8 +356,13 @@ export function RunSession({
                 </div>
                 <div style={{ width: 1, background: '#F0F0F0' }} />
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: 9, fontWeight: 600, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>Calories</div>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: '#1A1A1A' }}>{calories}<span style={{ fontSize: 10, color: '#AAA' }}> kcal</span></div>
+                  <div style={{ fontSize: 9, fontWeight: 600, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>Pace</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#1A1A1A' }}>{paceStr}<span style={{ fontSize: 10, color: '#AAA' }}>/km</span></div>
+                </div>
+                <div style={{ width: 1, background: '#F0F0F0' }} />
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 9, fontWeight: 600, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>Kcal</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#1A1A1A' }}>{calories}</div>
                 </div>
                 <div style={{ width: 1, background: '#F0F0F0' }} />
                 <div style={{ textAlign: 'center' }}>

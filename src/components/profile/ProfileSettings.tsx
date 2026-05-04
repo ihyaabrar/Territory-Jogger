@@ -175,7 +175,7 @@ export function ProfileSettings({
       <div style={{ background: '#fff', padding: '20px 20px 24px', borderBottom: '1px solid #F5F5F5', marginBottom: 8 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
           <h1 style={{ fontSize: 22, fontWeight: 900, color: '#1A1A1A', margin: 0 }}>My Profile</h1>
-          <button type="button" onClick={() => setEditMode(!editMode)}
+          <button type="button" onClick={() => { setEditMode(!editMode); if (!editMode) setSuccess(null) }}
             style={{ fontSize: 13, fontWeight: 600, color: '#FF6B35', background: 'none', border: 'none', cursor: 'pointer' }}>
             {editMode ? 'Cancel' : 'Edit Profile'}
           </button>

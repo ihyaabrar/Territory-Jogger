@@ -207,12 +207,28 @@ export class WebGPSTracker implements GPSTracker {
     // Abaikan titik dengan akurasi buruk (> 50 meter)
     if (accuracy > MAX_ACCURACY_M) return
 
+    // Calculate speed from position delta if browser doesn't provide it (common on mobile)
+    let derivedSpeed = speed ?? 0
+    if ((speed === null || speed === undefined) && this.lastCoordinate) {
+      const dtSec = (timestamp - this.lastCoordinate.timestamp) / 1000
+      if (dtSec > 0) {
+        const dLat = (latitude - this.lastCoordinate.lat) * Math.PI / 180
+        const dLng = (longitude - this.lastCoordinate.lng) * Math.PI / 180
+        const a = Math.sin(dLat / 2) ** 2 +
+          Math.cos(this.lastCoordinate.lat * Math.PI / 180) *
+          Math.cos(latitude * Math.PI / 180) *
+          Math.sin(dLng / 2) ** 2
+        const distM = 2 * 6371000 * Math.asin(Math.sqrt(a))
+        derivedSpeed = distM / dtSec // m/s
+      }
+    }
+
     const coord: Coordinate = {
       lat: latitude,
       lng: longitude,
       timestamp,
       accuracy,
-      speed: speed ?? 0, // speed bisa null di beberapa browser
+      speed: derivedSpeed,
     }
 
     // Update posisi terakhir

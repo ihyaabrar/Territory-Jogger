@@ -180,6 +180,11 @@ export function useInvasionNotifications({
   const [latestUnread, setLatestUnread] = useState<InvasionNotification | null>(null)
 
   const channelRef = useRef<RealtimeChannel | null>(null)
+  // Use refs for values used inside subscribe callback to avoid recreating channel
+  const isRunningRef = useRef(isRunning)
+  const notificationsEnabledRef = useRef(notificationsEnabled)
+  useEffect(() => { isRunningRef.current = isRunning }, [isRunning])
+  useEffect(() => { notificationsEnabledRef.current = notificationsEnabled }, [notificationsEnabled])
 
   // ─── Computed: unread count ─────────────────────────────────────────────────
 
@@ -248,7 +253,6 @@ export function useInvasionNotifications({
       supabase.removeChannel(channelRef.current)
       channelRef.current = null
     }
-
     const channel = supabase
       .channel(`invasion-notifications-${userId}`)
       .on(
@@ -284,12 +288,12 @@ export function useInvasionNotifications({
           setNotifications(prev => [newNotification, ...prev])
 
           // Set sebagai latest unread untuk in-app alert (Persyaratan 9.5)
-          if (isRunning) {
+          if (isRunningRef.current) {
             setLatestUnread(newNotification)
           }
 
           // Kirim browser notification jika diaktifkan dan tab tidak aktif
-          if (notificationsEnabled) {
+          if (notificationsEnabledRef.current) {
             await sendBrowserNotification(newNotification)
           }
         }
@@ -303,7 +307,7 @@ export function useInvasionNotifications({
       })
 
     channelRef.current = channel
-  }, [userId, isRunning, notificationsEnabled])
+  }, [userId]) // isRunning and notificationsEnabled accessed via refs — no need in deps
 
   // ─── Lifecycle ──────────────────────────────────────────────────────────────
 

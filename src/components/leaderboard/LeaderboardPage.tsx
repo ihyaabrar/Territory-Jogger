@@ -1,12 +1,13 @@
 /**
  * LeaderboardPage — Behance Running App Style
  * Activities Analyze screen
- * Fix: region selector so leaderboard can actually show data
+ * Fix: query regions from Supabase leaderboard_cache instead of hardcoded IDs
  */
 
 import { useState, useEffect, useCallback } from 'react'
 import { AVAILABLE_AVATARS } from '../profile/ProfileSettings'
 import { startLeaderboardPolling } from '../../services/leaderboardService'
+import { supabase } from '../../lib/supabase'
 import type { LeaderboardEntry, LeaderboardLevel } from '../../types'
 
 interface LeaderboardPageProps {
@@ -20,25 +21,7 @@ const TABS: { level: LeaderboardLevel; label: string }[] = [
   { level: 'kota', label: 'Kota' },
 ]
 
-// Demo region IDs — in production these would come from a geo-lookup API
-// or user profile. For now we provide a simple text input.
-const DEMO_REGIONS: Record<LeaderboardLevel, Array<{ id: string; name: string }>> = {
-  kelurahan: [
-    { id: 'kel-001', name: 'Malioboro' },
-    { id: 'kel-002', name: 'Prawirodirjan' },
-    { id: 'kel-003', name: 'Ngampilan' },
-  ],
-  kecamatan: [
-    { id: 'kec-001', name: 'Gedongtengen' },
-    { id: 'kec-002', name: 'Gondomanan' },
-    { id: 'kec-003', name: 'Kraton' },
-  ],
-  kota: [
-    { id: 'kota-001', name: 'Yogyakarta' },
-    { id: 'kota-002', name: 'Sleman' },
-    { id: 'kota-003', name: 'Bantul' },
-  ],
-}
+interface RegionOption { id: string; name: string }
 
 function resolveEmoji(avatarUrl: string): string {
   const found = AVAILABLE_AVATARS.find(a => a.id === avatarUrl)
@@ -113,8 +96,47 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
   const [entries, setEntries] = useState<LeaderboardEntry[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  // Allow user to select a region manually
   const [selectedRegionIds, setSelectedRegionIds] = useState<Partial<Record<LeaderboardLevel, string>>>(regionIds)
+  // Regions fetched from leaderboard_cache in DB
+  const [availableRegions, setAvailableRegions] = useState<Record<LeaderboardLevel, RegionOption[]>>({
+    kelurahan: [], kecamatan: [], kota: [],
+  })
+  const [regionsLoading, setRegionsLoading] = useState(true)
+
+  // Fetch distinct regions from leaderboard_cache
+  useEffect(() => {
+    async function loadRegions() {
+      setRegionsLoading(true)
+      try {
+        const { data, error: err } = await supabase
+          .from('leaderboard_cache')
+          .select('region_id, region_level, region_name')
+          .order('region_name', { ascending: true })
+
+        if (err || !data) {
+          // Fallback: show empty state with helpful message
+          setRegionsLoading(false)
+          return
+        }
+
+        const grouped: Record<LeaderboardLevel, RegionOption[]> = {
+          kelurahan: [], kecamatan: [], kota: [],
+        }
+        const seen = new Set<string>()
+        for (const row of data as { region_id: string; region_level: string; region_name: string }[]) {
+          const key = `${row.region_level}:${row.region_id}`
+          if (!seen.has(key) && (row.region_level === 'kelurahan' || row.region_level === 'kecamatan' || row.region_level === 'kota')) {
+            seen.add(key)
+            grouped[row.region_level as LeaderboardLevel].push({ id: row.region_id, name: row.region_name })
+          }
+        }
+        setAvailableRegions(grouped)
+      } finally {
+        setRegionsLoading(false)
+      }
+    }
+    void loadRegions()
+  }, [])
 
   const regionId = selectedRegionIds[activeTab]
   const myRank = entries.find(e => e.userId === userId)?.rank
@@ -128,7 +150,7 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
     return startLeaderboardPolling(activeTab, regionId, handleData, handleError)
   }, [activeTab, regionId, handleData, handleError])
 
-  const availableRegions = DEMO_REGIONS[activeTab]
+  const currentRegions = availableRegions[activeTab]
 
   return (
     <div style={{ background: '#F8F8F8', minHeight: '100%', paddingBottom: 16 }}>
@@ -175,26 +197,38 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
         <p style={{ fontSize: 11, fontWeight: 700, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 8px' }}>
           Pilih {activeTab}
         </p>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          {availableRegions.map(r => {
-            const isSelected = selectedRegionIds[activeTab] === r.id
-            return (
-              <button key={r.id} type="button"
-                onClick={() => setSelectedRegionIds(prev => ({ ...prev, [activeTab]: r.id }))}
-                style={{
-                  padding: '7px 14px', borderRadius: 99,
-                  background: isSelected ? '#FF6B35' : '#fff',
-                  border: isSelected ? 'none' : '1px solid #F0F0F0',
-                  color: isSelected ? '#fff' : '#555',
-                  fontSize: 12, fontWeight: isSelected ? 700 : 500,
-                  cursor: 'pointer',
-                  boxShadow: isSelected ? '0 2px 8px rgba(255,107,53,0.3)' : '0 1px 4px rgba(0,0,0,0.04)',
-                }}>
-                {r.name}
-              </button>
-            )
-          })}
-        </div>
+        {regionsLoading ? (
+          <div style={{ display: 'flex', gap: 8 }}>
+            {[1, 2, 3].map(i => (
+              <div key={i} style={{ height: 32, width: 80, background: '#F5F5F5', borderRadius: 99, opacity: 1 - i * 0.2 }} />
+            ))}
+          </div>
+        ) : currentRegions.length === 0 ? (
+          <p style={{ fontSize: 12, color: '#AAA', margin: 0 }}>
+            Belum ada data wilayah. Mulai berlari untuk mengisi leaderboard!
+          </p>
+        ) : (
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {currentRegions.map(r => {
+              const isSelected = selectedRegionIds[activeTab] === r.id
+              return (
+                <button key={r.id} type="button"
+                  onClick={() => setSelectedRegionIds(prev => ({ ...prev, [activeTab]: r.id }))}
+                  style={{
+                    padding: '7px 14px', borderRadius: 99,
+                    background: isSelected ? '#FF6B35' : '#fff',
+                    border: isSelected ? 'none' : '1px solid #F0F0F0',
+                    color: isSelected ? '#fff' : '#555',
+                    fontSize: 12, fontWeight: isSelected ? 700 : 500,
+                    cursor: 'pointer',
+                    boxShadow: isSelected ? '0 2px 8px rgba(255,107,53,0.3)' : '0 1px 4px rgba(0,0,0,0.04)',
+                  }}>
+                  {r.name}
+                </button>
+              )
+            })}
+          </div>
+        )}
       </div>
 
       {/* Content */}
@@ -213,11 +247,17 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
           </div>
         )}
 
-        {!loading && !error && !regionId && (
+        {!loading && !error && !regionId && !regionsLoading && (
           <div style={{ padding: '40px 16px', textAlign: 'center' }}>
             <p style={{ fontSize: 40, margin: '0 0 12px' }}>🏆</p>
-            <p style={{ fontSize: 15, fontWeight: 700, color: '#1A1A1A', margin: '0 0 6px' }}>Pilih wilayah di atas</p>
-            <p style={{ fontSize: 13, color: '#AAA', margin: 0 }}>untuk melihat peringkat di area kamu</p>
+            <p style={{ fontSize: 15, fontWeight: 700, color: '#1A1A1A', margin: '0 0 6px' }}>
+              {currentRegions.length > 0 ? 'Pilih wilayah di atas' : 'Belum ada data wilayah'}
+            </p>
+            <p style={{ fontSize: 13, color: '#AAA', margin: 0 }}>
+              {currentRegions.length > 0
+                ? 'untuk melihat peringkat di area kamu'
+                : 'Klaim wilayah pertamamu untuk muncul di sini!'}
+            </p>
           </div>
         )}
 

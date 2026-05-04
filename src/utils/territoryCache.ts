@@ -22,6 +22,9 @@ import type { ViewportBBox } from '../services/territoryService'
 /** TTL default untuk setiap cache entry dalam milidetik (60 detik) */
 const DEFAULT_TTL_MS = 60_000
 
+/** Maximum number of cache entries to prevent unbounded memory growth */
+const MAX_CACHE_SIZE = 50
+
 // ─── Tipe Data ────────────────────────────────────────────────────────────────
 
 /**
@@ -122,6 +125,20 @@ export function setCached(
     createdAt: now,
     expiresAt: now + ttlMs,
   })
+
+  // Evict oldest entries if cache exceeds max size
+  if (cache.size > MAX_CACHE_SIZE) {
+    // Find and delete the entry with the earliest createdAt
+    let oldestKey = ''
+    let oldestTime = Infinity
+    for (const [k, entry] of cache) {
+      if (entry.createdAt < oldestTime) {
+        oldestTime = entry.createdAt
+        oldestKey = k
+      }
+    }
+    if (oldestKey) cache.delete(oldestKey)
+  }
 }
 
 /**

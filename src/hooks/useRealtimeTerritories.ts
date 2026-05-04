@@ -129,7 +129,7 @@ export function useRealtimeTerritories({
   const addTerritory = useTerritoryStore((state) => state.addTerritory)
   const updateTerritory = useTerritoryStore((state) => state.updateTerritory)
   const removeTerritory = useTerritoryStore((state) => state.removeTerritory)
-  const territories = useTerritoryStore((state) => state.territories)
+  // Access territories via getState() to avoid recreating handlers on every territory change
   const setTerritories = useTerritoryStore((state) => state.setTerritories)
 
   const channelRef = useRef<RealtimeChannel | null>(null)
@@ -155,12 +155,14 @@ export function useRealtimeTerritories({
       // Invalidasi cache untuk territory yang baru masuk
       invalidateCacheEntry(row.id)
 
-      const territory = rowToTerritory(row, territories)
+      // Access current territories via store getState to avoid stale closure
+      const currentTerritories = useTerritoryStore.getState().territories
+      const territory = rowToTerritory(row, currentTerritories)
       if (territory) {
         addTerritory(territory)
       }
     },
-    [addTerritory, territories]
+    [addTerritory]
   )
 
   const handleUpdate = useCallback(
@@ -171,7 +173,8 @@ export function useRealtimeTerritories({
       // Invalidasi cache untuk territory yang diperbarui
       invalidateCacheEntry(row.id)
 
-      const territory = rowToTerritory(row, territories)
+      const currentTerritories = useTerritoryStore.getState().territories
+      const territory = rowToTerritory(row, currentTerritories)
       if (territory) {
         updateTerritory(row.id, {
           geom: territory.geom,
@@ -180,7 +183,7 @@ export function useRealtimeTerritories({
         })
       }
     },
-    [updateTerritory, territories]
+    [updateTerritory]
   )
 
   const handleDelete = useCallback(

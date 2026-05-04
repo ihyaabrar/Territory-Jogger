@@ -10,6 +10,13 @@ import type { Territory } from '../../types/index'
 import { IconCrosshair, IconZoomIn, IconZoomOut, IconCompass } from '../ui/Icons'
 import 'leaflet/dist/leaflet.css'
 
+// Cache the Leaflet module after first import to avoid repeated dynamic imports
+let leafletCache: typeof import('leaflet') | null = null
+async function getLeaflet() {
+  if (!leafletCache) leafletCache = await import('leaflet')
+  return leafletCache
+}
+
 const DARK_MAP_URL = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
 const CARTO_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
 const DEFAULT_CENTER: [number, number] = [-7.7956, 110.3695]
@@ -55,7 +62,6 @@ export function MapView({
 
     import('leaflet').then((L) => {
       if (!mapContainerRef.current || mapRef.current) return
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (L.Icon.Default.prototype as any)._getIconUrl
       L.Icon.Default.mergeOptions({
@@ -100,18 +106,8 @@ export function MapView({
 
       map.on('moveend', updateCenter)
       map.on('zoomend', updateCenter)
-      // Update koordinat saat drag juga (real-time)
-      map.on('move', () => {
-        const c = map.getCenter()
-        setMapCenter({ lat: c.lat, lng: c.lng })
-      })
-
-      // Juga update saat mouse move di desktop
-      map.on('mousemove', (e) => {
-        if (!userPosition) {
-          setMapCenter({ lat: e.latlng.lat, lng: e.latlng.lng })
-        }
-      })
+      // Update koordinat saat drag — throttled via moveend (fires after drag ends)
+      // Removed mousemove handler: caused 60fps re-renders on desktop
 
       // Initial — set koordinat langsung saat peta siap
       setTimeout(() => updateCenter(), 100)
@@ -145,7 +141,7 @@ export function MapView({
   // ─── Update territories ────────────────────────────────────────────────────
   const updateTerritories = useCallback(async (newTerritories: Territory[]) => {
     if (!mapRef.current || !territoryLayerRef.current) return
-    const L = await import('leaflet')
+    const L = await getLeaflet()
     const layer = territoryLayerRef.current
     const existing = territoryPolygonsRef.current
     const newIds = new Set(newTerritories.map((t) => t.id))
@@ -196,7 +192,7 @@ export function MapView({
 
     markerRafRef.current = requestAnimationFrame(() => {
       markerRafRef.current = null
-      import('leaflet').then((L) => {
+      getLeaflet().then((L) => {
         if (!mapRef.current) return
         const position = pendingMarkerPositionRef.current
 
@@ -234,7 +230,7 @@ export function MapView({
   // ─── Update run track ──────────────────────────────────────────────────────
   useEffect(() => {
     if (!mapRef.current) return
-    import('leaflet').then((L) => {
+    getLeaflet().then((L) => {
       if (!mapRef.current) return
       if (!runTrack) {
         if (runTrackPolylineRef.current) { runTrackPolylineRef.current.remove(); runTrackPolylineRef.current = null }

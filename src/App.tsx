@@ -80,7 +80,9 @@ function AppContent() {
   const handleSessionChange = useCallback((running: boolean) => {
     setIsRunning(running)
     if (!running) {
-      setUserPosition(null)
+      // Don't clear userPosition here — RunSession keeps marker visible after stop
+      // so user can see where they finished. Position is cleared by onPositionUpdate(null)
+      // only on speed violation or GPS lost.
       setRunTrack(null)
     }
   }, [])
@@ -114,30 +116,14 @@ function AppContent() {
   // ─── Loading ───────────────────────────────────────────────────────────────
   if (!initialized) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 12, background: 'var(--color-bg)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 12, background: '#F8F8F8' }}>
         <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid rgba(255,107,53,0.15)', borderTopColor: '#FF6B35', animation: 'spin 0.8s linear infinite' }} />
-        <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Memuat...</p>
+        <p style={{ color: '#888', fontSize: 14 }}>Memuat...</p>
       </div>
     )
   }
 
-  // ─── Missing env vars ──────────────────────────────────────────────────────
-  if (!isSupabaseConfigured) {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16, background: '#F8F8F8', padding: 24 }}>
-        <span style={{ fontSize: 48 }}>⚙️</span>
-        <h2 style={{ fontSize: 20, fontWeight: 900, color: '#1A1A1A', margin: 0, textAlign: 'center' }}>Konfigurasi Diperlukan</h2>
-        <p style={{ fontSize: 14, color: '#888', textAlign: 'center', maxWidth: 320, lineHeight: 1.6 }}>
-          Salin file <code style={{ background: '#F0F0F0', padding: '2px 6px', borderRadius: 4 }}>.env.example</code> ke{' '}
-          <code style={{ background: '#F0F0F0', padding: '2px 6px', borderRadius: 4 }}>.env</code> dan isi dengan kredensial Supabase kamu.
-        </p>
-        <div style={{ background: '#fff', borderRadius: 12, padding: '12px 16px', border: '1px solid #F0F0F0', fontFamily: 'monospace', fontSize: 12, color: '#555', width: '100%', maxWidth: 320 }}>
-          VITE_SUPABASE_URL=https://xxx.supabase.co<br />
-          VITE_SUPABASE_ANON_KEY=eyJ...
-        </div>
-      </div>
-    )
-  }
+  // ─── Missing env vars — already handled in App() before AuthProvider ──────
 
   // ─── Auth ──────────────────────────────────────────────────────────────────
   if (!user) {
@@ -149,13 +135,13 @@ function AppContent() {
   // ─── Notification overlay ──────────────────────────────────────────────────
   if (showNotifications) {
     return (
-      <div style={{ height: '100dvh', background: 'var(--color-bg)', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderBottom: '1px solid var(--color-border)', background: '#fff' }}>
+      <div style={{ height: '100dvh', background: '#F8F8F8', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderBottom: '1px solid #F0F0F0', background: '#fff' }}>
           <button type="button" onClick={() => setShowNotifications(false)}
-            style={{ background: 'none', border: 'none', color: 'var(--color-orange)', cursor: 'pointer', fontSize: 14, fontWeight: 700, padding: 0 }}>
+            style={{ background: 'none', border: 'none', color: '#FF6B35', cursor: 'pointer', fontSize: 14, fontWeight: 700, padding: 0 }}>
             ← Kembali
           </button>
-          <h1 style={{ fontSize: 16, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>Notifikasi</h1>
+          <h1 style={{ fontSize: 16, fontWeight: 800, color: '#1A1A1A', margin: 0 }}>Notifikasi</h1>
         </div>
         <div style={{ flex: 1, overflowY: 'auto' }}>
           <NotificationHistory
@@ -173,13 +159,13 @@ function AppContent() {
   // ─── Privacy overlay ───────────────────────────────────────────────────────
   if (showPrivacy) {
     return (
-      <div style={{ height: '100dvh', background: 'var(--color-bg)', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderBottom: '1px solid var(--color-border)', background: '#fff' }}>
+      <div style={{ height: '100dvh', background: '#F8F8F8', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderBottom: '1px solid #F0F0F0', background: '#fff' }}>
           <button type="button" onClick={() => setShowPrivacy(false)}
-            style={{ background: 'none', border: 'none', color: 'var(--color-orange)', cursor: 'pointer', fontSize: 14, fontWeight: 700, padding: 0 }}>
+            style={{ background: 'none', border: 'none', color: '#FF6B35', cursor: 'pointer', fontSize: 14, fontWeight: 700, padding: 0 }}>
             ← Kembali
           </button>
-          <h1 style={{ fontSize: 16, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>Privacy Zone</h1>
+          <h1 style={{ fontSize: 16, fontWeight: 800, color: '#1A1A1A', margin: 0 }}>Privacy Zone</h1>
         </div>
         <div style={{ flex: 1, overflowY: 'auto' }}>
           <PrivacyZoneManager userId={user.id} />
@@ -347,6 +333,23 @@ function NavBtn({ active, onClick, label, children }: {
 }
 
 function App() {
+  // Check config before mounting AuthProvider to avoid hanging on placeholder URL
+  if (!isSupabaseConfigured) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16, background: '#F8F8F8', padding: 24 }}>
+        <span style={{ fontSize: 48 }}>⚙️</span>
+        <h2 style={{ fontSize: 20, fontWeight: 900, color: '#1A1A1A', margin: 0, textAlign: 'center' }}>Konfigurasi Diperlukan</h2>
+        <p style={{ fontSize: 14, color: '#888', textAlign: 'center', maxWidth: 320, lineHeight: 1.6 }}>
+          Salin file <code style={{ background: '#F0F0F0', padding: '2px 6px', borderRadius: 4 }}>.env.example</code> ke{' '}
+          <code style={{ background: '#F0F0F0', padding: '2px 6px', borderRadius: 4 }}>.env</code> dan isi dengan kredensial Supabase kamu.
+        </p>
+        <div style={{ background: '#fff', borderRadius: 12, padding: '12px 16px', border: '1px solid #F0F0F0', fontFamily: 'monospace', fontSize: 12, color: '#555', width: '100%', maxWidth: 320 }}>
+          VITE_SUPABASE_URL=https://xxx.supabase.co<br />
+          VITE_SUPABASE_ANON_KEY=eyJ...
+        </div>
+      </div>
+    )
+  }
   return (
     <AuthProvider>
       <AppContent />
