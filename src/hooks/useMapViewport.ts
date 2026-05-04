@@ -7,7 +7,7 @@
  * Persyaratan: 6.3, 6.4, 11.3
  */
 
-import { useCallback, useRef } from 'react'
+import { useCallback, useRef, useEffect } from 'react'
 import { useTerritoryStore } from '../stores/territoryStore'
 import { getTerritoriesInViewport } from '../services/territoryService'
 import type { ViewportBBox } from '../services/territoryService'
@@ -23,9 +23,16 @@ export function useMapViewport(): UseMapViewportReturn {
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isLoadingRef = useRef(false)
   const lastBBoxRef = useRef<ViewportBBox | null>(null)
+  const mountedRef = useRef(true)
 
   // Gunakan getState() langsung agar tidak masuk dependency array
   const storeRef = useRef(useTerritoryStore.getState)
+
+  // Track mounted state
+  useEffect(() => {
+    mountedRef.current = true
+    return () => { mountedRef.current = false }
+  }, [])
 
   const loadTerritoriesInViewport = useCallback(async (bbox: ViewportBBox) => {
     if (isLoadingRef.current) return
@@ -33,6 +40,7 @@ export function useMapViewport(): UseMapViewportReturn {
 
     try {
       const newTerritories = await getTerritoriesInViewport(bbox)
+      if (!mountedRef.current) return // Component unmounted during fetch
       const { territories, addTerritory, updateTerritory, removeTerritory } = storeRef.current()
 
       const newIds = new Set(newTerritories.map((t) => t.id))

@@ -119,18 +119,22 @@ export function RunSession({
   }, [])
 
   const processClaim = useCallback(async (coords: Coordinate[]) => {
-    const loop = geometryEngine.detectLoop(coords)
-    if (!loop) return
-    const poly = geometryEngine.processClaimPolygon(coords, loop, privacyZones)
-    if (!poly) return
-    addPendingClaim(poly)
-    const res = await claimTerritory(userId, poly)
-    if (res) {
-      applyClaimResult(poly, res, userId, userColor, username)
-      setClaimed(p => p + 1)
-      setClaimMsg('Wilayah diklaim! 🎉')
-      if (claimTimerRef.current) clearTimeout(claimTimerRef.current)
-      claimTimerRef.current = setTimeout(() => setClaimMsg(null), 3000)
+    try {
+      const loop = geometryEngine.detectLoop(coords)
+      if (!loop) return
+      const poly = geometryEngine.processClaimPolygon(coords, loop, privacyZones)
+      if (!poly) return
+      addPendingClaim(poly)
+      const res = await claimTerritory(userId, poly)
+      if (res) {
+        applyClaimResult(poly, res, userId, userColor, username)
+        setClaimed(p => p + 1)
+        setClaimMsg('Wilayah diklaim! 🎉')
+        if (claimTimerRef.current) clearTimeout(claimTimerRef.current)
+        claimTimerRef.current = setTimeout(() => setClaimMsg(null), 3000)
+      }
+    } catch (err) {
+      console.warn('[RunSession] processClaim error:', err)
     }
   }, [userId, userColor, username, privacyZones, addPendingClaim, applyClaimResult])
 

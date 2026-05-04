@@ -3,7 +3,7 @@
  * Light theme, Strava-inspired navigation
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useCallback, useMemo, useEffect, Component, type ReactNode, type ErrorInfo } from 'react'
 import type { Feature, LineString } from 'geojson'
 import './App.css'
 import { AuthProvider } from './contexts/AuthContext'
@@ -27,6 +27,7 @@ import {
 } from './components/ui/Icons'
 import { gpsTracker } from './services/gpsTracker'
 import { isSupabaseConfigured } from './lib/supabase'
+import { registerOfflineSyncListener } from './services/territoryService'
 import type { ViewportBBox } from './services/territoryService'
 import type { UserProfile } from './types/index'
 
@@ -34,6 +35,71 @@ type NavPage = 'home' | 'map' | 'history' | 'leaderboard' | 'profile'
 type AuthView = 'login' | 'register'
 
 const NAV_HEIGHT = 72
+
+// ─── Error Boundary ────────────────────────────────────────────────────────────
+interface EBState { hasError: boolean; message: string }
+class AppErrorBoundary extends Component<{ children: ReactNode }, EBState> {
+  constructor(props: { children: ReactNode }) {
+    super(props)
+    this.state = { hasError: false, message: '' }
+  }
+  static getDerivedStateFromError(error: Error): EBState {
+    return { hasError: true, message: error.message }
+  }
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('[ErrorBoundary]', error, info)
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16, background: '#F8F7F7', padding: 24 }}>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="#C0392B" strokeWidth="2"/>
+            <path d="M12 7V13" stroke="#C0392B" strokeWidth="2.5" strokeLinecap="round"/>
+            <circle cx="12" cy="16.5" r="1.2" fill="#C0392B"/>
+          </svg>
+          <h2 style={{ fontSize: 18, fontWeight: 800, color: '#1A1A1A', margin: 0, textAlign: 'center' }}>Terjadi Kesalahan</h2>
+          <p style={{ fontSize: 13, color: '#888', textAlign: 'center', maxWidth: 280 }}>{this.state.message}</p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            style={{ padding: '12px 28px', background: '#C0392B', color: '#fff', border: 'none', borderRadius: 99, fontSize: 14, fontWeight: 700, cursor: 'pointer' }}
+          >
+            Muat Ulang
+          </button>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
+
+// ─── Offline Banner ────────────────────────────────────────────────────────────
+function OfflineBanner() {
+  const [offline, setOffline] = useState(!navigator.onLine)
+  useEffect(() => {
+    const on = () => setOffline(false)
+    const off = () => setOffline(true)
+    window.addEventListener('online', on)
+    window.addEventListener('offline', off)
+    return () => { window.removeEventListener('online', on); window.removeEventListener('offline', off) }
+  }, [])
+  if (!offline) return null
+  return (
+    <div style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
+      background: '#1A1A1A', color: '#fff', fontSize: 12, fontWeight: 600,
+      textAlign: 'center', padding: '6px 16px',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+    }}>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+        <path d="M1 1L23 23" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"/>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+      Tidak ada koneksi — klaim akan disimpan lokal
+    </div>
+  )
+}
 
 function AppContent() {
   const { user, initialized, signOut } = useAuth()
@@ -124,6 +190,12 @@ function AppContent() {
       if (data) setUserProfile(data)
     })
   }, [user])
+
+  // Register offline sync listener once on mount
+  useEffect(() => {
+    const cleanup = registerOfflineSyncListener()
+    return cleanup
+  }, [])
 
   const userColor = userProfile?.userColor ?? '#C0392B'
   const username = userProfile?.username ?? (user?.email?.split('@')[0] ?? 'Jogger')
@@ -361,8 +433,12 @@ function App() {
   // Check config before mounting AuthProvider to avoid hanging on placeholder URL
   if (!isSupabaseConfigured) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16, background: '#F8F8F8', padding: 24 }}>
-        <span style={{ fontSize: 48 }}>⚙️</span>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16, background: '#F8F7F7', padding: 24 }}>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="#C0392B" strokeWidth="2"/>
+          <path d="M12 7V13" stroke="#C0392B" strokeWidth="2.5" strokeLinecap="round"/>
+          <circle cx="12" cy="16.5" r="1.2" fill="#C0392B"/>
+        </svg>
         <h2 style={{ fontSize: 20, fontWeight: 900, color: '#1A1A1A', margin: 0, textAlign: 'center' }}>Konfigurasi Diperlukan</h2>
         <p style={{ fontSize: 14, color: '#888', textAlign: 'center', maxWidth: 320, lineHeight: 1.6 }}>
           Salin file <code style={{ background: '#F0F0F0', padding: '2px 6px', borderRadius: 4 }}>.env.example</code> ke{' '}
@@ -376,9 +452,12 @@ function App() {
     )
   }
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <AppErrorBoundary>
+      <OfflineBanner />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </AppErrorBoundary>
   )
 }
 

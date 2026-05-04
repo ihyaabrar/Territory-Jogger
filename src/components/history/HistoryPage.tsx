@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { getRecentSessions, formatDuration, formatRelativeTime, type RunSessionRecord } from '../../services/runSessionService'
+import { RunnerIllustration } from '../ui/Icons'
 
 interface HistoryPageProps {
   userId: string
@@ -49,13 +50,7 @@ function ActivityCard({ session, index }: { session: RunSessionRecord; index: nu
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ width: 40, height: 40, borderRadius: 12, background: '#FDECEA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <circle cx="15" cy="4.5" r="2" stroke="#C0392B" strokeWidth="2"/>
-                <path d="M15 6.5L12.5 11L9 13" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M13.5 8.5L17 10.5" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M12.5 11L14.5 16L12 20" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M12.5 11L10 15L12 19" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <RunnerIllustration size={20} color="#C0392B" />
             </div>
             <div>
               <p style={{ fontSize: 15, fontWeight: 800, color: '#1A1A1A', margin: '0 0 2px' }}>{dayName} Run</p>
@@ -202,13 +197,7 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
         ) : sessions.length === 0 ? (
           <div style={{ padding: '40px 16px', textAlign: 'center' }}>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                <circle cx="15" cy="4.5" r="2" stroke="#C0392B" strokeWidth="2"/>
-                <path d="M15 6.5L12.5 11L9 13" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M13.5 8.5L17 10.5" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M12.5 11L14.5 16L12 20" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M12.5 11L10 15L12 19" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <RunnerIllustration size={48} color="#C0392B" />
             </div>
             <p style={{ fontSize: 16, fontWeight: 800, color: '#1A1A1A', margin: '0 0 6px' }}>Belum ada aktivitas</p>
             <p style={{ fontSize: 13, color: '#AAA', margin: 0 }}>Mulai lari pertamamu!</p>

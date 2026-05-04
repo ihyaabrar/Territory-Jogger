@@ -284,23 +284,39 @@ export function IconLayers({ size = 24, color = 'currentColor', strokeWidth = sw
   )
 }
 
-// ─── Run / Pelari ────────────────────────────────────────────────────────────
-// Figur pelari yang lebih ekspresif
+// ─── Record / Run (nav icon) — digantikan oleh IconRun di bawah ─────────────
+
+// ─── Runner SVG — reusable inline component ──────────────────────────────────
+// Pictogram atletik: badan condong, kaki ditekuk, tangan terentang
+export function RunnerIllustration({ size = 40, color = '#C0392B' }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none">
+      {/* Kepala */}
+      <circle cx="72" cy="18" r="10" fill={color}/>
+      {/* Badan condong ke depan */}
+      <path d="M68 28 L52 55" stroke={color} strokeWidth="9" strokeLinecap="round"/>
+      {/* Lengan kiri ke depan-bawah */}
+      <path d="M62 38 L42 52" stroke={color} strokeWidth="8" strokeLinecap="round"/>
+      {/* Lengan kanan ke belakang-atas */}
+      <path d="M62 38 L80 28" stroke={color} strokeWidth="8" strokeLinecap="round"/>
+      {/* Kaki kiri — ditekuk ke depan */}
+      <path d="M52 55 L35 72 L22 82" stroke={color} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round"/>
+      {/* Kaki kanan — ditekuk ke belakang */}
+      <path d="M52 55 L60 75 L78 82" stroke={color} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+}
+
+// ─── Run / Pelari (nav icon kecil) ───────────────────────────────────────────
 export function IconRun({ size = 24, color = 'currentColor', strokeWidth = sw }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      {/* Kepala */}
-      <circle cx="15" cy="4.5" r="2" stroke={color} strokeWidth={strokeWidth}/>
-      {/* Badan */}
-      <path d="M15 6.5L13 11L9 13" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"/>
-      {/* Lengan */}
-      <path d="M13.5 8.5L17 10.5" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round"/>
-      {/* Kaki depan */}
-      <path d="M13 11L15 16L13 20" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"/>
-      {/* Kaki belakang */}
-      <path d="M13 11L10 15L12 19" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"/>
-      {/* Garis kecepatan */}
-      <path d="M4 10H7.5M3 13H6.5M4.5 16H7" stroke={color} strokeWidth={strokeWidth * 0.75} strokeLinecap="round" opacity="0.4"/>
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none">
+      <circle cx="72" cy="18" r="10" fill={color}/>
+      <path d="M68 28 L52 55" stroke={color} strokeWidth="9" strokeLinecap="round"/>
+      <path d="M62 38 L42 52" stroke={color} strokeWidth={strokeWidth * 4} strokeLinecap="round"/>
+      <path d="M62 38 L80 28" stroke={color} strokeWidth={strokeWidth * 4} strokeLinecap="round"/>
+      <path d="M52 55 L35 72 L22 82" stroke={color} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M52 55 L60 75 L78 82" stroke={color} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   )
 }

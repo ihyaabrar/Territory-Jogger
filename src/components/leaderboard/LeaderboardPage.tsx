@@ -162,8 +162,22 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
 
   useEffect(() => {
     if (!regionId) { setEntries([]); setLoading(false); return }
-    setLoading(true); setError(null); setEntries([])
-    return startLeaderboardPolling(activeTab, regionId, handleData, handleError)
+    // Only poll when tab is visible
+    let stopFn: (() => void) | undefined
+    const startPoll = () => {
+      setLoading(true); setError(null); setEntries([])
+      stopFn = startLeaderboardPolling(activeTab, regionId, handleData, handleError)
+    }
+    const handleVisibility = () => {
+      if (document.hidden) { stopFn?.(); stopFn = undefined }
+      else startPoll()
+    }
+    startPoll()
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => {
+      stopFn?.()
+      document.removeEventListener('visibilitychange', handleVisibility)
+    }
   }, [activeTab, regionId, handleData, handleError])
 
   const currentRegions = availableRegions[activeTab]

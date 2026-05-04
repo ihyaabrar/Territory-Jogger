@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Logo } from '../ui/Logo'
+import { RunnerIllustration } from '../ui/Icons'
 import type { UserProfile } from '../../types/index'
 import {
   getWeeklyStats, getRecentSessions, formatDuration, formatRelativeTime,
@@ -99,15 +100,7 @@ function DateSelector() {
 // SVG icons untuk stat cards — dibuat sendiri
 function StatIcon({ type }: { type: 'run' | 'fire' | 'clock' | 'map' }) {
   const c = '#C0392B'
-  if (type === 'run') return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-      <circle cx="15" cy="4.5" r="2" stroke={c} strokeWidth="2"/>
-      <path d="M15 6.5L12.5 11L9 13" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M13.5 8.5L17 10.5" stroke={c} strokeWidth="2" strokeLinecap="round"/>
-      <path d="M12.5 11L14.5 16L12 20" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M12.5 11L10 15L12 19" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  )
+  if (type === 'run') return <RunnerIllustration size={16} color={c} />
   if (type === 'fire') return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
       <path d="M12 2C12 2 7 7.5 7 13C7 16.31 9.24 19 12 19C14.76 19 17 16.31 17 13C17 10.5 15.5 9 15.5 9C15.5 9 14.5 11.5 12.5 11.5C10.5 11.5 10 9.5 10 9.5C10 9.5 12 7 12 2Z" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -158,14 +151,7 @@ function ActivityItem({ session }: { session: RunSessionRecord }) {
     }}>
       {/* SVG Runner icon */}
       <div style={{ width: 44, height: 44, borderRadius: 14, background: '#FDECEA', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <circle cx="15" cy="4.5" r="2" stroke="#C0392B" strokeWidth="2"/>
-          <path d="M15 6.5L12.5 11L9 13" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M13.5 8.5L17 10.5" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
-          <path d="M12.5 11L14.5 16L12 20" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M12.5 11L10 15L12 19" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M4 10H7M3 13H6" stroke="#C0392B" strokeWidth="1.5" strokeLinecap="round" opacity="0.35"/>
-        </svg>
+        <RunnerIllustration size={22} color="#C0392B" />
       </div>
 
       {/* Info */}
@@ -199,13 +185,17 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
   })
   const [recentSessions, setRecentSessions] = useState<RunSessionRecord[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   const loadData = useCallback(async () => {
     setLoading(true)
+    setLoadError(null)
     try {
       const [stats, sessions] = await Promise.all([getWeeklyStats(userId), getRecentSessions(userId, 3)])
       setWeeklyStats(stats)
       setRecentSessions(sessions)
+    } catch (err) {
+      setLoadError(err instanceof Error ? err.message : 'Gagal memuat data')
     } finally {
       setLoading(false)
     }
@@ -226,8 +216,16 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
   return (
     <div style={{ background: '#F8F8F8', minHeight: '100%', paddingBottom: 16 }}>
 
-      {/* ── Header ── */}
-      <div style={{ background: '#fff', padding: '16px 20px 14px', borderBottom: '1px solid #F5F5F5' }}>
+      {/* ── Error banner ── */}
+      {loadError && (
+        <div style={{ margin: '12px 16px 0', padding: '10px 14px', background: '#FDECEA', border: '1px solid #F5B7B1', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#C0392B" strokeWidth="2"/><path d="M12 7V13" stroke="#C0392B" strokeWidth="2.5" strokeLinecap="round"/><circle cx="12" cy="16.5" r="1.2" fill="#C0392B"/></svg>
+          <span style={{ fontSize: 12, color: '#C0392B', fontWeight: 600, flex: 1 }}>{loadError}</span>
+          <button type="button" onClick={() => void loadData()} style={{ fontSize: 11, color: '#C0392B', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Coba lagi</button>
+        </div>
+      )}
+
+      {/* ── Header ── */}      <div style={{ background: '#fff', padding: '16px 20px 14px', borderBottom: '1px solid #F5F5F5' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
           <div>
             <p style={{ fontSize: 13, color: '#AAA', margin: '0 0 2px', fontWeight: 500 }}>
@@ -361,13 +359,7 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
         ) : recentSessions.length === 0 ? (
           <div style={{ background: '#fff', borderRadius: 16, padding: '24px 16px', textAlign: 'center', border: '1px solid #F5F5F5' }}>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8 }}>
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
-                <circle cx="15" cy="4.5" r="2" stroke="#C0392B" strokeWidth="2"/>
-                <path d="M15 6.5L12.5 11L9 13" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M13.5 8.5L17 10.5" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M12.5 11L14.5 16L12 20" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M12.5 11L10 15L12 19" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <RunnerIllustration size={40} color="#C0392B" />
             </div>
             <p style={{ fontSize: 14, fontWeight: 700, color: '#1A1A1A', margin: '0 0 4px' }}>Belum ada aktivitas</p>
             <p style={{ fontSize: 12, color: '#AAA', margin: '0 0 16px' }}>Mulai lari pertamamu!</p>
