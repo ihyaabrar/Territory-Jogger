@@ -39,7 +39,11 @@ function TrackPreview({ track, color }: { track: Feature<LineString> | null; col
     return (
       <div style={{ height: 160, background: '#F8F8F8', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #F0F0F0' }}>
         <div style={{ textAlign: 'center' }}>
-          <p style={{ fontSize: 32, margin: '0 0 8px' }}>🗺️</p>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" style={{ marginBottom: 8 }}>
+            <path d="M3 6L9 4L15 7L21 5V19L15 21L9 18L3 20V6Z" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <line x1="9" y1="4" x2="9" y2="18" stroke="#C0392B" strokeWidth="1.4" strokeLinecap="round" opacity="0.5"/>
+            <line x1="15" y1="7" x2="15" y2="21" stroke="#C0392B" strokeWidth="1.4" strokeLinecap="round" opacity="0.5"/>
+          </svg>
           <p style={{ fontSize: 12, color: '#AAA' }}>Tidak ada data jalur</p>
         </div>
       </div>

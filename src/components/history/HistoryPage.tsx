@@ -48,8 +48,14 @@ function ActivityCard({ session, index }: { session: RunSessionRecord; index: nu
       <div style={{ padding: '14px 16px 12px', borderBottom: '1px solid #F8F8F8' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: '#FDECEA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
-              🏃
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: '#FDECEA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <circle cx="15" cy="4.5" r="2" stroke="#C0392B" strokeWidth="2"/>
+                <path d="M15 6.5L12.5 11L9 13" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M13.5 8.5L17 10.5" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M12.5 11L14.5 16L12 20" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12.5 11L10 15L12 19" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </div>
             <div>
               <p style={{ fontSize: 15, fontWeight: 800, color: '#1A1A1A', margin: '0 0 2px' }}>{dayName} Run</p>
@@ -164,7 +170,14 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
       {/* Territory stat */}
       <div style={{ margin: '0 16px 12px', background: '#fff', borderRadius: 16, padding: '14px 16px', border: '1px solid #F5F5F5', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 24 }}>🗺️</span>
+          {/* Map pin SVG */}
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: '#FDECEA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M3 6L9 4L15 7L21 5V19L15 21L9 18L3 20V6Z" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <line x1="9" y1="4" x2="9" y2="18" stroke="#C0392B" strokeWidth="1.4" strokeLinecap="round" opacity="0.5"/>
+              <line x1="15" y1="7" x2="15" y2="21" stroke="#C0392B" strokeWidth="1.4" strokeLinecap="round" opacity="0.5"/>
+            </svg>
+          </div>
           <div>
             <p style={{ fontSize: 12, color: '#AAA', margin: '0 0 2px', fontWeight: 600 }}>Total Wilayah Dikuasai</p>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
@@ -173,7 +186,11 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
             </div>
           </div>
         </div>
-        <span style={{ fontSize: 24 }}>🏁</span>
+        {/* Flag SVG */}
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M5 3V21" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+          <path d="M5 4.5L19 4.5L15 9.5L19 14.5L5 14.5" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
       </div>
 
       {/* Activity list */}
@@ -184,7 +201,15 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
           ))
         ) : sessions.length === 0 ? (
           <div style={{ padding: '40px 16px', textAlign: 'center' }}>
-            <p style={{ fontSize: 48, margin: '0 0 12px' }}>🏃</p>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <circle cx="15" cy="4.5" r="2" stroke="#C0392B" strokeWidth="2"/>
+                <path d="M15 6.5L12.5 11L9 13" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M13.5 8.5L17 10.5" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M12.5 11L14.5 16L12 20" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12.5 11L10 15L12 19" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
             <p style={{ fontSize: 16, fontWeight: 800, color: '#1A1A1A', margin: '0 0 6px' }}>Belum ada aktivitas</p>
             <p style={{ fontSize: 13, color: '#AAA', margin: 0 }}>Mulai lari pertamamu!</p>
           </div>

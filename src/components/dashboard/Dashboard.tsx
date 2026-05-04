@@ -96,7 +96,40 @@ function DateSelector() {
 }
 
 // ─── Stat mini card ───────────────────────────────────────────────────────────
-function MiniStat({ label, value, unit, icon }: { label: string; value: string; unit: string; icon: string }) {
+// SVG icons untuk stat cards — dibuat sendiri
+function StatIcon({ type }: { type: 'run' | 'fire' | 'clock' | 'map' }) {
+  const c = '#C0392B'
+  if (type === 'run') return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <circle cx="15" cy="4.5" r="2" stroke={c} strokeWidth="2"/>
+      <path d="M15 6.5L12.5 11L9 13" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M13.5 8.5L17 10.5" stroke={c} strokeWidth="2" strokeLinecap="round"/>
+      <path d="M12.5 11L14.5 16L12 20" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M12.5 11L10 15L12 19" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+  if (type === 'fire') return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2C12 2 7 7.5 7 13C7 16.31 9.24 19 12 19C14.76 19 17 16.31 17 13C17 10.5 15.5 9 15.5 9C15.5 9 14.5 11.5 12.5 11.5C10.5 11.5 10 9.5 10 9.5C10 9.5 12 7 12 2Z" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="12" cy="14.5" r="1.5" fill={c} opacity="0.6"/>
+    </svg>
+  )
+  if (type === 'clock') return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="9" stroke={c} strokeWidth="2"/>
+      <path d="M12 7V12.5L15.5 15" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+  // map / territory
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2C8.5 2 5.5 4.9 5.5 8.5C5.5 13.5 12 22 12 22C12 22 18.5 13.5 18.5 8.5C18.5 4.9 15.5 2 12 2Z" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="12" cy="8.5" r="2.5" stroke={c} strokeWidth="2"/>
+    </svg>
+  )
+}
+
+function MiniStat({ label, value, unit, iconType }: { label: string; value: string; unit: string; iconType: 'run' | 'fire' | 'clock' | 'map' }) {
   return (
     <div style={{
       flex: 1, background: '#fff', borderRadius: 16, padding: '14px 10px',
@@ -104,7 +137,7 @@ function MiniStat({ label, value, unit, icon }: { label: string; value: string; 
       boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '1px solid #F5F5F5',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-        <span style={{ fontSize: 14 }}>{icon}</span>
+        <StatIcon type={iconType} />
         <span style={{ fontSize: 9, fontWeight: 700, color: '#CCC', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{label}</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 3 }}>
@@ -123,9 +156,16 @@ function ActivityItem({ session }: { session: RunSessionRecord }) {
       border: '1px solid #F5F5F5', boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
       display: 'flex', alignItems: 'center', gap: 14,
     }}>
-      {/* Icon */}
+      {/* SVG Runner icon */}
       <div style={{ width: 44, height: 44, borderRadius: 14, background: '#FDECEA', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <span style={{ fontSize: 20 }}>🏃</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <circle cx="15" cy="4.5" r="2" stroke="#C0392B" strokeWidth="2"/>
+          <path d="M15 6.5L12.5 11L9 13" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M13.5 8.5L17 10.5" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+          <path d="M12.5 11L14.5 16L12 20" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M12.5 11L10 15L12 19" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M4 10H7M3 13H6" stroke="#C0392B" strokeWidth="1.5" strokeLinecap="round" opacity="0.35"/>
+        </svg>
       </div>
 
       {/* Info */}
@@ -212,9 +252,9 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
       {/* ── Today stats ── */}
       <div style={{ padding: '0 16px', marginBottom: 12 }}>
         <div style={{ display: 'flex', gap: 8 }}>
-          <MiniStat label="Distance" value={loading ? '—' : todayDist.toFixed(2)} unit="km" icon="🏃" />
-          <MiniStat label="Burned" value={loading ? '—' : todayKcal.toString()} unit="kcal" icon="🔥" />
-          <MiniStat label="Time" value={loading ? '—' : todayMin.toString()} unit="min" icon="⏱" />
+          <MiniStat label="Distance" value={loading ? '—' : todayDist.toFixed(2)} unit="km" iconType="run" />
+          <MiniStat label="Burned" value={loading ? '—' : todayKcal.toString()} unit="kcal" iconType="fire" />
+          <MiniStat label="Time" value={loading ? '—' : todayMin.toString()} unit="min" iconType="clock" />
         </div>
       </div>
 
@@ -264,7 +304,15 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
           <button type="button" onClick={() => onNavigate('leaderboard')}
             style={{ flex: 1, background: '#fff', borderRadius: 14, padding: '10px 12px', border: '1px solid #F5F5F5', cursor: 'pointer', textAlign: 'left', boxShadow: '0 2px 6px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 18 }}>🏆</span>
+            {/* Trophy SVG */}
+            <div style={{ width: 32, height: 32, borderRadius: 10, background: '#FDECEA', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M7 3H17V12C17 14.76 14.76 17 12 17C9.24 17 7 14.76 7 12V3Z" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M7 6H4.5C4.5 6 3 6.5 3 8.5C3 10.5 5 11.5 7 11" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M17 6H19.5C19.5 6 21 6.5 21 8.5C21 10.5 19 11.5 17 11" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M12 17V20M9 20H15" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
             <div>
               <p style={{ fontSize: 11, fontWeight: 700, color: '#1A1A1A', margin: 0 }}>Peringkat</p>
               <p style={{ fontSize: 9, color: '#AAA', margin: 0 }}>Leaderboard</p>
@@ -272,7 +320,21 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
           </button>
           <button type="button" onClick={() => onNavigate('notifications')}
             style={{ flex: 1, background: '#fff', borderRadius: 14, padding: '10px 12px', border: '1px solid #F5F5F5', cursor: 'pointer', textAlign: 'left', boxShadow: '0 2px 6px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 18 }}>⚔️</span>
+            {/* Sword / Invasion SVG */}
+            <div style={{ width: 32, height: 32, borderRadius: 10, background: '#FDECEA', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                {/* Pedang kiri */}
+                <path d="M4 4L14 14" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M4 4L6 4L4 6" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M14 14L12 17L15 16L14 14Z" fill="#C0392B"/>
+                {/* Pedang kanan */}
+                <path d="M20 4L10 14" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M20 4L18 4L20 6" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M10 14L12 17L9 16L10 14Z" fill="#C0392B"/>
+                {/* Kilat tengah */}
+                <circle cx="12" cy="14" r="1.2" fill="#C0392B" opacity="0.5"/>
+              </svg>
+            </div>
             <div>
               <p style={{ fontSize: 11, fontWeight: 700, color: '#1A1A1A', margin: 0 }}>Invasion</p>
               <p style={{ fontSize: 9, color: '#AAA', margin: 0 }}>Notifikasi</p>
@@ -298,7 +360,15 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
           </div>
         ) : recentSessions.length === 0 ? (
           <div style={{ background: '#fff', borderRadius: 16, padding: '24px 16px', textAlign: 'center', border: '1px solid #F5F5F5' }}>
-            <p style={{ fontSize: 32, margin: '0 0 8px' }}>🏃</p>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8 }}>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                <circle cx="15" cy="4.5" r="2" stroke="#C0392B" strokeWidth="2"/>
+                <path d="M15 6.5L12.5 11L9 13" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M13.5 8.5L17 10.5" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M12.5 11L14.5 16L12 20" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12.5 11L10 15L12 19" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
             <p style={{ fontSize: 14, fontWeight: 700, color: '#1A1A1A', margin: '0 0 4px' }}>Belum ada aktivitas</p>
             <p style={{ fontSize: 12, color: '#AAA', margin: '0 0 16px' }}>Mulai lari pertamamu!</p>
             <button type="button" onClick={() => onNavigate('map')}

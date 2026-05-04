@@ -29,9 +29,25 @@ function resolveEmoji(avatarUrl: string): string {
 }
 
 function RankBadge({ rank }: { rank: number }) {
-  if (rank === 1) return <span style={{ fontSize: 20 }}>🥇</span>
-  if (rank === 2) return <span style={{ fontSize: 20 }}>🥈</span>
-  if (rank === 3) return <span style={{ fontSize: 20 }}>🥉</span>
+  // Medal SVG untuk top 3
+  if (rank === 1) return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="14" fill="#FFF3CD" stroke="#F0C040" strokeWidth="1.5"/>
+      <text x="16" y="21" textAnchor="middle" fontSize="14" fontWeight="900" fill="#B8860B" fontFamily="Inter,sans-serif">1</text>
+    </svg>
+  )
+  if (rank === 2) return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="14" fill="#F0F0F0" stroke="#AAAAAA" strokeWidth="1.5"/>
+      <text x="16" y="21" textAnchor="middle" fontSize="14" fontWeight="900" fill="#666" fontFamily="Inter,sans-serif">2</text>
+    </svg>
+  )
+  if (rank === 3) return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="14" fill="#FDE8D8" stroke="#CD7F32" strokeWidth="1.5"/>
+      <text x="16" y="21" textAnchor="middle" fontSize="14" fontWeight="900" fill="#8B4513" fontFamily="Inter,sans-serif">3</text>
+    </svg>
+  )
   return (
     <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#F5F5F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <span style={{ fontSize: 12, fontWeight: 700, color: '#AAA' }}>{rank}</span>
@@ -249,7 +265,14 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
 
         {!loading && !error && !regionId && !regionsLoading && (
           <div style={{ padding: '40px 16px', textAlign: 'center' }}>
-            <p style={{ fontSize: 40, margin: '0 0 12px' }}>🏆</p>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <path d="M7 3H17V12C17 14.76 14.76 17 12 17C9.24 17 7 14.76 7 12V3Z" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M7 6H4.5C4.5 6 3 6.5 3 8.5C3 10.5 5 11.5 7 11" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M17 6H19.5C19.5 6 21 6.5 21 8.5C21 10.5 19 11.5 17 11" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M12 17V20M9 20H15" stroke="#C0392B" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
             <p style={{ fontSize: 15, fontWeight: 700, color: '#1A1A1A', margin: '0 0 6px' }}>
               {currentRegions.length > 0 ? 'Pilih wilayah di atas' : 'Belum ada data wilayah'}
             </p>
@@ -263,7 +286,11 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
 
         {!loading && !error && regionId && entries.length === 0 && (
           <div style={{ padding: '40px 16px', textAlign: 'center' }}>
-            <p style={{ fontSize: 40, margin: '0 0 12px' }}>🗺️</p>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <path d="M3 6L9 4L15 7L21 5V19L15 21L9 18L3 20V6Z" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
             <p style={{ fontSize: 15, fontWeight: 700, color: '#1A1A1A', margin: '0 0 6px' }}>Belum ada data</p>
             <p style={{ fontSize: 13, color: '#AAA', margin: 0 }}>Jadilah yang pertama klaim wilayah!</p>
           </div>
