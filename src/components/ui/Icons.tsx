@@ -287,28 +287,52 @@ export function IconLayers({ size = 24, color = 'currentColor', strokeWidth = 2 
 }
 
 // ─── Runner Illustration ─────────────────────────────────────────────────────
-// Berdasarkan Lucide "person-running" icon — proporsi atletik yang benar
-// Kepala di kanan atas, badan condong, kaki dan tangan ditekuk berlawanan
+// Runner bold dengan speed lines — seperti referensi gambar
 export function RunnerIllustration({ size = 40, color = '#C0392B' }: { size?: number; color?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-      stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      {/* Kepala */}
-      <circle cx="13" cy="4" r="1.5"/>
-      {/* Badan condong ke depan */}
-      <path d="M11.5 6.5 9 12"/>
-      {/* Lengan kiri ke depan-bawah */}
-      <path d="M10.5 8.5 7 11"/>
-      {/* Lengan kanan ke belakang-atas */}
-      <path d="M10.5 8.5 14 7"/>
-      {/* Paha kiri ke depan */}
-      <path d="M9 12 7 16"/>
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* ── Speed lines di belakang ── */}
+      <line x1="62" y1="22" x2="90" y2="18" stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity="0.25"/>
+      <line x1="58" y1="30" x2="92" y2="26" stroke={color} strokeWidth="3" strokeLinecap="round" opacity="0.2"/>
+      <line x1="55" y1="50" x2="88" y2="46" stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity="0.25"/>
+      <line x1="52" y1="58" x2="90" y2="55" stroke={color} strokeWidth="3" strokeLinecap="round" opacity="0.2"/>
+      <line x1="10" y1="52" x2="38" y2="50" stroke={color} strokeWidth="3" strokeLinecap="round" opacity="0.2"/>
+      <line x1="8" y1="60" x2="32" y2="58" stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity="0.15"/>
+
+      {/* ── Kepala ── */}
+      <circle cx="38" cy="16" r="9" fill={color}/>
+
+      {/* ── Badan condong ke depan ── */}
+      <line x1="38" y1="25" x2="52" y2="55"
+        stroke={color} strokeWidth="9" strokeLinecap="round"/>
+
+      {/* ── Lengan kanan ke depan-bawah ── */}
+      <line x1="42" y1="35" x2="62" y2="48"
+        stroke={color} strokeWidth="8" strokeLinecap="round"/>
+      {/* Siku kanan ditekuk */}
+      <line x1="62" y1="48" x2="56" y2="62"
+        stroke={color} strokeWidth="7" strokeLinecap="round"/>
+
+      {/* ── Lengan kiri ke belakang-atas ── */}
+      <line x1="40" y1="33" x2="18" y2="44"
+        stroke={color} strokeWidth="8" strokeLinecap="round"/>
+      {/* Siku kiri ditekuk */}
+      <line x1="18" y1="44" x2="22" y2="58"
+        stroke={color} strokeWidth="7" strokeLinecap="round"/>
+
+      {/* ── Paha kiri ke depan ── */}
+      <line x1="52" y1="55" x2="40" y2="75"
+        stroke={color} strokeWidth="9" strokeLinecap="round"/>
       {/* Betis kiri ditekuk ke belakang */}
-      <path d="M7 16 9 19"/>
-      {/* Paha kanan ke belakang */}
-      <path d="M9 12 12 15"/>
+      <line x1="40" y1="75" x2="52" y2="90"
+        stroke={color} strokeWidth="8" strokeLinecap="round"/>
+
+      {/* ── Paha kanan ke belakang ── */}
+      <line x1="52" y1="55" x2="68" y2="70"
+        stroke={color} strokeWidth="9" strokeLinecap="round"/>
       {/* Betis kanan ditekuk ke depan */}
-      <path d="M12 15 10 19"/>
+      <line x1="68" y1="70" x2="58" y2="88"
+        stroke={color} strokeWidth="8" strokeLinecap="round"/>
     </svg>
   )
 }
