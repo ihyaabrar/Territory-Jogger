@@ -225,7 +225,8 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
         </div>
       )}
 
-      {/* ── Header ── */}      <div style={{ background: '#fff', padding: '16px 20px 14px', borderBottom: '1px solid #F5F5F5' }}>
+      {/* ── Header ── */}
+      <div style={{ background: '#fff', padding: '16px 20px 14px', borderBottom: '1px solid #F5F5F5' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
           <div>
             <p style={{ fontSize: 13, color: '#AAA', margin: '0 0 2px', fontWeight: 500 }}>
@@ -344,7 +345,7 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
       {/* ── Recent activities ── */}
       <div style={{ padding: '0 16px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-          <p style={{ fontSize: 14, fontWeight: 800, color: '#1A1A1A', margin: 0 }}>My Walk List</p>
+          <p style={{ fontSize: 14, fontWeight: 800, color: '#1A1A1A', margin: 0 }}>Aktivitas Terbaru</p>
           {weeklyStats.sessionCount > 0 && (
             <span style={{ fontSize: 11, color: '#C0392B', fontWeight: 600 }}>{weeklyStats.sessionCount} sesi</span>
           )}
@@ -375,7 +376,7 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
         )}
       </div>
 
-      {/* ── CTA buttons like Behance ── */}
+      {/* ── CTA buttons ── */}
       {recentSessions.length > 0 && (
         <div style={{ padding: '12px 16px 0', display: 'flex', gap: 10 }}>
           <button type="button" onClick={() => onNavigate('history')}

@@ -32,8 +32,7 @@ export interface RunSessionProps {
   totalTerritoryKm2?: number
 }
 
-function coordsToLineString(coords: Coordinate[]): Feature<LineString> | null {
-  if (coords.length < 2) return null
+function coordsToLineString(coords: Coordinate[]): Feature<LineString> | null {  if (coords.length < 2) return null
   return {
     type: 'Feature',
     properties: {},
@@ -60,6 +59,9 @@ function fmtDur(sec: number): string {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
+/** Throttle: only check for loop every N GPS points to avoid O(n²) on long runs */
+const CLAIM_CHECK_INTERVAL = 5
+
 export function RunSession({
   userId, userColor, username, privacyZones = [],
   onPositionUpdate, onTrackUpdate, onSessionChange,
@@ -85,9 +87,8 @@ export function RunSession({
   const lastTrackRef = useRef<Feature<LineString> | null>(null)
   // Accumulate distance incrementally to avoid re-computing full track each update
   const distRef = useRef(0)
-  // Throttle processClaim: only run every 5 new GPS points to avoid O(n²) on long runs
+  // Throttle processClaim counter (interval constant defined at module level)
   const claimCheckCounterRef = useRef(0)
-  const CLAIM_CHECK_INTERVAL = 5
 
   const applyClaimResult = useTerritoryStore(s => s.applyClaimResult)
   const addPendingClaim = useTerritoryStore(s => s.addPendingClaim)

@@ -1,14 +1,59 @@
 /**
- * Logo Territory Jogger — Red Rose Theme
- * Ikon pelari dengan lingkaran track dan warna Red Rose
+ * Logo Territory Jogger
+ * Terinspirasi dari app icon: map pin + runner + dashed route di atas peta
+ * Background merah, elemen putih
  */
 
 const ROSE = '#C0392B'
-const ROSE_DEEP = '#96281B'
 
 interface LogoProps {
   size?: 'xs' | 'sm' | 'md' | 'lg'
   variant?: 'full' | 'icon' | 'wordmark'
+}
+
+// ─── App Icon SVG (map pin + runner + map) ────────────────────────────────────
+function AppIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Background rounded square */}
+      <rect width="100" height="100" rx="22" fill={ROSE}/>
+
+      {/* ── Peta / territory shape ── */}
+      <path d="M18 62 L28 55 L45 58 L62 52 L78 56 L82 72 L68 78 L50 74 L32 78 L18 72 Z"
+        fill="white" opacity="0.9"/>
+
+      {/* ── Dashed route di peta ── */}
+      <path d="M30 70 Q42 64 55 66 Q65 68 72 63"
+        stroke={ROSE} strokeWidth="2.5" strokeDasharray="4 3" strokeLinecap="round" fill="none"/>
+
+      {/* ── Map Pin ── */}
+      {/* Shadow/depth */}
+      <ellipse cx="40" cy="62" rx="8" ry="3" fill="rgba(0,0,0,0.15)"/>
+      {/* Pin body */}
+      <path d="M40 20 C31 20 24 27 24 36 C24 48 40 62 40 62 C40 62 56 48 56 36 C56 27 49 20 40 20 Z"
+        fill="white"/>
+      {/* Pin hole */}
+      <circle cx="40" cy="36" r="7" fill={ROSE}/>
+
+      {/* ── Runner figure ── */}
+      {/* Kepala */}
+      <circle cx="72" cy="34" r="5" fill="white"/>
+      {/* Badan */}
+      <path d="M70 39 L66 48" stroke="white" strokeWidth="3.5" strokeLinecap="round"/>
+      {/* Lengan kanan ke depan */}
+      <path d="M68 42 L62 46" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+      {/* Lengan kiri ke belakang */}
+      <path d="M68 42 L74 39" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+      {/* Paha kiri ke depan */}
+      <path d="M66 48 L60 54" stroke="white" strokeWidth="3.5" strokeLinecap="round"/>
+      {/* Betis kiri */}
+      <path d="M60 54 L63 60" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+      {/* Paha kanan ke belakang */}
+      <path d="M66 48 L72 53" stroke="white" strokeWidth="3.5" strokeLinecap="round"/>
+      {/* Betis kanan */}
+      <path d="M72 53 L78 57" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+    </svg>
+  )
 }
 
 export function Logo({ size = 'md', variant = 'full' }: LogoProps) {
@@ -18,33 +63,7 @@ export function Logo({ size = 'md', variant = 'full' }: LogoProps) {
   const titleSize = Math.round(22 * scale)
   const subtitleSize = Math.round(9 * scale)
 
-  const Icon = () => (
-    <svg width={iconSize} height={iconSize} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Track luar — lingkaran tipis */}
-      <circle cx="20" cy="20" r="17" stroke={ROSE} strokeWidth="1.5" opacity="0.18"/>
-      {/* Arc progress ~270° */}
-      <circle cx="20" cy="20" r="17"
-        stroke={ROSE} strokeWidth="2.5"
-        strokeDasharray="80 27" strokeDashoffset="20"
-        strokeLinecap="round"
-        transform="rotate(-90 20 20)"/>
-      {/* Kepala pelari */}
-      <circle cx="25" cy="9.5" r="2.8" fill={ROSE}/>
-      {/* Badan */}
-      <path d="M25 12.3L22 17.5L17.5 20" stroke={ROSE} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-      {/* Lengan */}
-      <path d="M23 15L27.5 17" stroke={ROSE} strokeWidth="2.2" strokeLinecap="round"/>
-      {/* Kaki depan */}
-      <path d="M22 17.5L24 23L21.5 28" stroke={ROSE} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-      {/* Kaki belakang */}
-      <path d="M22 17.5L19 22L21 27" stroke={ROSE_DEEP} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
-      {/* Titik lokasi kecil */}
-      <circle cx="11" cy="31" r="2" fill={ROSE} opacity="0.45"/>
-      <circle cx="11" cy="31" r="1" fill={ROSE}/>
-    </svg>
-  )
-
-  if (variant === 'icon') return <Icon />
+  if (variant === 'icon') return <AppIcon size={iconSize} />
 
   if (variant === 'wordmark') {
     return (
@@ -61,7 +80,7 @@ export function Logo({ size = 'md', variant = 'full' }: LogoProps) {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: Math.round(10 * scale) }}>
-      <Icon />
+      <AppIcon size={iconSize} />
       <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
         <span style={{ fontSize: titleSize, fontWeight: 900, color: '#1A1A1A', letterSpacing: '-0.03em' }}>
           Jogger

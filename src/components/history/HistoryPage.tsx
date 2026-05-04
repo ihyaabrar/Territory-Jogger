@@ -111,9 +111,11 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
   const [sessions, setSessions] = useState<RunSessionRecord[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'week' | 'month'>('all')
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   const loadSessions = useCallback(async (f: 'all' | 'week' | 'month') => {
     setLoading(true)
+    setLoadError(null)
     try {
       let since: Date | undefined
       const now = new Date()
@@ -126,6 +128,8 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
       }
       const data = await getRecentSessions(userId, 100, since)
       setSessions(data)
+    } catch (err) {
+      setLoadError(err instanceof Error ? err.message : 'Gagal memuat riwayat')
     } finally {
       setLoading(false)
     }
@@ -138,9 +142,18 @@ export function HistoryPage({ userId, totalTerritoryKm2 }: HistoryPageProps) {
 
       {/* Header */}
       <div style={{ background: '#fff', padding: '16px 20px 14px', borderBottom: '1px solid #F5F5F5', marginBottom: 12 }}>
-        <h1 style={{ fontSize: 22, fontWeight: 900, color: '#1A1A1A', margin: '0 0 4px', letterSpacing: '-0.02em' }}>My Walk List</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 900, color: '#1A1A1A', margin: '0 0 4px', letterSpacing: '-0.02em' }}>Riwayat Lari</h1>
         <p style={{ fontSize: 13, color: '#AAA', margin: 0 }}>{sessions.length} aktivitas{filter !== 'all' ? ` (${filter === 'week' ? '7 hari' : '30 hari'} terakhir)` : ' tercatat'}</p>
       </div>
+
+      {/* Error banner */}
+      {loadError && (
+        <div style={{ margin: '0 16px 12px', padding: '10px 14px', background: '#FDECEA', border: '1px solid #F5B7B1', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#C0392B" strokeWidth="2"/><path d="M12 7V13" stroke="#C0392B" strokeWidth="2.5" strokeLinecap="round"/><circle cx="12" cy="16.5" r="1.2" fill="#C0392B"/></svg>
+          <span style={{ fontSize: 12, color: '#C0392B', fontWeight: 600, flex: 1 }}>{loadError}</span>
+          <button type="button" onClick={() => void loadSessions(filter)} style={{ fontSize: 11, color: '#C0392B', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Coba lagi</button>
+        </div>
+      )}
 
       {/* Filter tabs */}
       <div style={{ padding: '0 16px', marginBottom: 12, display: 'flex', gap: 8 }}>

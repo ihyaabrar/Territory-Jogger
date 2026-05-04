@@ -60,7 +60,7 @@ export function MapView({
   useEffect(() => {
     if (typeof window === 'undefined' || !mapContainerRef.current || mapRef.current) return
 
-    import('leaflet').then((L) => {
+    getLeaflet().then((L) => {
       if (!mapContainerRef.current || mapRef.current) return
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (L.Icon.Default.prototype as any)._getIconUrl

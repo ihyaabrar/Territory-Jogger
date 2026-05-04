@@ -177,6 +177,8 @@ function AppContent() {
     setRunTrack(null)
     setIsRunning(false)
     setActivePage('home')
+    // Clear territory store so stale data doesn't show for next user
+    useTerritoryStore.getState().clearTerritories()
     await signOut()
   }, [signOut])
 
@@ -365,7 +367,7 @@ function AppContent() {
         </NavBtn>
 
         {/* Activity — CENTER slot (position 3 of 5) */}
-        <NavBtn active={activePage === 'map'} onClick={() => setActivePage('map')} label="Activity">
+        <NavBtn active={activePage === 'map'} onClick={() => setActivePage('map')} label="Activity" hideIndicator={true}>
           <div style={{
             width: 44, height: 44, borderRadius: '50%',
             background: activePage === 'map' ? '#C0392B' : '#F5F5F5',
@@ -377,6 +379,13 @@ function AppContent() {
           }}>
             <IconMap size={22} color={activePage === 'map' ? '#fff' : '#AAAAAA'} />
           </div>
+          {/* Active dot below the floating button */}
+          {activePage === 'map' && (
+            <span style={{
+              position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
+              width: 20, height: 3, borderRadius: '3px 3px 0 0', background: '#C0392B',
+            }} />
+          )}
         </NavBtn>
 
         <NavBtn active={activePage === 'leaderboard'} onClick={() => setActivePage('leaderboard')} label="Peringkat">
@@ -398,8 +407,8 @@ function AppContent() {
   )
 }
 
-function NavBtn({ active, onClick, label, children }: {
-  active: boolean; onClick: () => void; label: string; children: React.ReactNode
+function NavBtn({ active, onClick, label, children, hideIndicator = false }: {
+  active: boolean; onClick: () => void; label: string; children: React.ReactNode; hideIndicator?: boolean
 }) {
   return (
     <button type="button" onClick={onClick} aria-label={label} aria-current={active ? 'page' : undefined}
@@ -419,7 +428,7 @@ function NavBtn({ active, onClick, label, children }: {
       }}>
         {label}
       </span>
-      {active && (
+      {active && !hideIndicator && (
         <span style={{
           position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
           width: 20, height: 3, borderRadius: '3px 3px 0 0', background: '#C0392B',
