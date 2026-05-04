@@ -32,13 +32,17 @@ export function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormProps) {
         padding: '60px 24px 48px', display: 'flex', flexDirection: 'column', alignItems: 'center',
         position: 'relative', overflow: 'hidden',
       }}>
-        <div style={{ position: 'absolute', top: -40, right: -40, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
-        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 100, height: 100, borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
-        <div style={{ position: 'relative', marginBottom: 16 }}>
-          <Logo size="md" variant="icon" />
+        {/* Decorative circles — behind content */}
+        <div style={{ position: 'absolute', top: -40, right: -40, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 100, height: 100, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', pointerEvents: 'none' }} />
+        {/* Content */}
+        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ marginBottom: 16 }}>
+            <Logo size="md" variant="icon" />
+          </div>
+          <h1 style={{ fontSize: 28, fontWeight: 900, color: '#fff', margin: '0 0 6px', letterSpacing: '-0.03em', textAlign: 'center' }}>Territory Runner</h1>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', margin: 0, textAlign: 'center' }}>Klaim wilayah dengan berlari</p>
         </div>
-        <h1 style={{ fontSize: 28, fontWeight: 900, color: '#fff', margin: '0 0 6px', letterSpacing: '-0.03em', textAlign: 'center' }}>Territory Runner</h1>
-        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', margin: 0, textAlign: 'center' }}>Klaim wilayah dengan berlari</p>
       </div>
 
       {/* Form card */}

@@ -52,12 +52,17 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
         padding: '52px 24px 40px', display: 'flex', flexDirection: 'column', alignItems: 'center',
         position: 'relative', overflow: 'hidden',
       }}>
-        <div style={{ position: 'absolute', top: -40, right: -40, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
-        <div style={{ position: 'relative', marginBottom: 14 }}>
-          <Logo size="sm" variant="icon" />
+        {/* Decorative circles — behind content */}
+        <div style={{ position: 'absolute', top: -40, right: -40, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 90, height: 90, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', pointerEvents: 'none' }} />
+        {/* Content — z-index above circles */}
+        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ marginBottom: 14 }}>
+            <Logo size="sm" variant="icon" />
+          </div>
+          <h1 style={{ fontSize: 24, fontWeight: 900, color: '#fff', margin: '0 0 4px', letterSpacing: '-0.03em', textAlign: 'center' }}>Buat Akun</h1>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', margin: 0, textAlign: 'center' }}>Bergabung dan mulai klaim wilayah</p>
         </div>
-        <h1 style={{ fontSize: 24, fontWeight: 900, color: '#fff', margin: '0 0 4px', letterSpacing: '-0.03em', textAlign: 'center' }}>Buat Akun</h1>
-        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', margin: 0, textAlign: 'center' }}>Bergabung dan mulai klaim wilayah</p>
       </div>
 
       {/* Form card */}
