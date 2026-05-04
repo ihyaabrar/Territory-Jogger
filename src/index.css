@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ─── Design System — Behance Running App Style ─────────────────────────────── */
+:root {
+  /* Core palette */
+  --white:       #FFFFFF;
+  --bg:          #F8F8F8;
+  --card:        #FFFFFF;
+  --border:      #F0F0F0;
+  --border-2:    #E8E8E8;
+
+  /* Orange accent — primary brand color */
+  --orange:      #FF6B35;
+  --orange-light:#FFF0EB;
+  --orange-mid:  rgba(255,107,53,0.15);
+  --orange-glow: 0 4px 20px rgba(255,107,53,0.3);
+
+  /* Text hierarchy */
+  --t1:  #1A1A1A;   /* primary — headings, big numbers */
+  --t2:  #555555;   /* secondary — labels */
+  --t3:  #AAAAAA;   /* muted — hints, units */
+  --t4:  #CCCCCC;   /* disabled */
+
+  /* Semantic */
+  --green:  #4CAF50;
+  --blue:   #2196F3;
+  --red:    #F44336;
+
+  /* Radius */
+  --r-sm:   10px;
+  --r-md:   16px;
+  --r-lg:   24px;
+  --r-xl:   32px;
+  --r-full: 9999px;
+
+  /* Shadow */
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.10);
+
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--t1);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+body { background: var(--bg); color: var(--t1); }
+#root { width: 100%; height: 100dvh; }
+button { font-family: inherit; }
+input { font-family: inherit; }
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #E0E0E0; border-radius: 3px; }
+
+/* ─── Leaflet overrides ──────────────────────────────────────────────────────── */
+.leaflet-container {
+  background: #E8E8E8 !important;
+  font-family: 'Inter', sans-serif !important;
+}
+.leaflet-control-attribution {
+  background: rgba(255,255,255,0.9) !important;
+  color: #BBB !important;
+  font-size: 9px !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+.leaflet-control-zoom { display: none !important; }
+.leaflet-attribution-flag { display: none !important; }
+
+/* ─── Animations ─────────────────────────────────────────────────────────────── */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
