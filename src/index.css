@@ -1,43 +1,54 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-/* ─── Design System — Red Rose Theme ─────────────────────────────────────────── */
+/* ─── Design System — Territory Runner ───────────────────────────────────────── */
 :root {
   /* Core palette */
   --white:       #FFFFFF;
-  --bg:          #F8F7F7;
+  --bg:          #F5F4F4;
   --card:        #FFFFFF;
-  --border:      #F0EEEE;
-  --border-2:    #E8E4E4;
+  --border:      #EEEBEB;
+  --border-2:    #E5E0E0;
 
-  /* Red Rose — primary brand color */
+  /* Red Rose gradient system */
   --rose:        #C0392B;
   --rose-deep:   #96281B;
+  --rose-bright: #E74C3C;
   --rose-light:  #FDECEA;
-  --rose-mid:    rgba(192,57,43,0.15);
-  --rose-glow:   0 4px 20px rgba(192,57,43,0.35);
+  --rose-mid:    rgba(192,57,43,0.12);
+  --rose-glow:   0 4px 24px rgba(192,57,43,0.35);
+
+  /* Gradients */
+  --grad-rose:   linear-gradient(135deg, #C0392B 0%, #E74C3C 100%);
+  --grad-dark:   linear-gradient(135deg, #1A0A0A 0%, #2D1010 100%);
+  --grad-card:   linear-gradient(180deg, #FFFFFF 0%, #FDF9F9 100%);
+  --grad-hero:   linear-gradient(135deg, #C0392B 0%, #96281B 60%, #7B1F14 100%);
 
   /* Text hierarchy */
   --t1:  #1A1A1A;
-  --t2:  #555555;
-  --t3:  #AAAAAA;
+  --t2:  #4A4A4A;
+  --t3:  #999999;
   --t4:  #CCCCCC;
 
   /* Semantic */
   --green:  #27AE60;
+  --green-light: #E8F8EF;
+  --amber:  #F59E0B;
   --blue:   #2980B9;
-  --red:    #C0392B;
 
   /* Radius */
-  --r-sm:   10px;
-  --r-md:   16px;
+  --r-xs:   8px;
+  --r-sm:   12px;
+  --r-md:   18px;
   --r-lg:   24px;
   --r-xl:   32px;
   --r-full: 9999px;
 
   /* Shadow */
-  --shadow-sm:  0 2px 8px rgba(0,0,0,0.06);
-  --shadow-md:  0 4px 16px rgba(0,0,0,0.08);
-  --shadow-lg:  0 8px 32px rgba(0,0,0,0.10);
+  --shadow-xs:  0 1px 4px rgba(0,0,0,0.05);
+  --shadow-sm:  0 2px 10px rgba(0,0,0,0.07);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.09);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,0.12);
+  --shadow-rose: 0 4px 20px rgba(192,57,43,0.25);
 
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 16px;
@@ -59,7 +70,7 @@ input { font-family: inherit; }
 /* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #E0D8D8; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(192,57,43,0.2); border-radius: 3px; }
 
 /* ─── Leaflet overrides ──────────────────────────────────────────────────────── */
 .leaflet-container {
@@ -80,14 +91,26 @@ input { font-family: inherit; }
 /* ─── Animations ─────────────────────────────────────────────────────────────── */
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes pulse-ring {
-  0% { transform: scale(1); opacity: 0.4; }
-  100% { transform: scale(2.2); opacity: 0; }
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(2.4); opacity: 0; }
 }
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes slide-up {
   from { transform: translateY(100%); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ─── Skeleton loading ───────────────────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #F0EEEE 25%, #E8E4E4 50%, #F0EEEE 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
 }
