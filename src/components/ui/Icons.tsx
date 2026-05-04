@@ -286,37 +286,43 @@ export function IconLayers({ size = 24, color = 'currentColor', strokeWidth = sw
 
 // ─── Record / Run (nav icon) — digantikan oleh IconRun di bawah ─────────────
 
-// ─── Runner SVG — reusable inline component ──────────────────────────────────
-// Pictogram atletik: badan condong, kaki ditekuk, tangan terentang
+// ─── Runner SVG — Pictogram atletik solid (filled, bukan stroke) ─────────────
+// Meniru gaya Olympic/athletics pictogram: semua bagian tubuh filled solid
 export function RunnerIllustration({ size = 40, color = '#C0392B' }: { size?: number; color?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 100 100" fill="none">
+    <svg width={size} height={size} viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       {/* Kepala */}
-      <circle cx="72" cy="18" r="10" fill={color}/>
-      {/* Badan condong ke depan */}
-      <path d="M68 28 L52 55" stroke={color} strokeWidth="9" strokeLinecap="round"/>
-      {/* Lengan kiri ke depan-bawah */}
-      <path d="M62 38 L42 52" stroke={color} strokeWidth="8" strokeLinecap="round"/>
+      <circle cx="44" cy="8" r="6" fill={color}/>
+      {/* Badan + paha kiri (condong ke depan) */}
+      <path d="M40 14 C36 16 30 22 26 32 L32 34 C35 26 39 21 42 18 Z" fill={color}/>
       {/* Lengan kanan ke belakang-atas */}
-      <path d="M62 38 L80 28" stroke={color} strokeWidth="8" strokeLinecap="round"/>
-      {/* Kaki kiri — ditekuk ke depan */}
-      <path d="M52 55 L35 72 L22 82" stroke={color} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round"/>
-      {/* Kaki kanan — ditekuk ke belakang */}
-      <path d="M52 55 L60 75 L78 82" stroke={color} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M40 18 C42 16 50 12 54 10 C55 13 53 15 51 16 C48 17 44 20 42 22 Z" fill={color}/>
+      {/* Lengan kiri ke depan-bawah */}
+      <path d="M36 22 C32 26 24 30 20 32 C19 29 21 27 23 26 C27 24 32 20 34 18 Z" fill={color}/>
+      {/* Kaki kiri — ditekuk ke depan, lutut terangkat */}
+      <path d="M26 32 C22 38 16 44 10 50 C8 48 9 45 11 44 C16 39 20 34 22 30 Z" fill={color}/>
+      {/* Betis kiri */}
+      <path d="M10 50 C8 54 10 58 12 58 C14 58 16 56 16 54 C14 52 12 51 10 50 Z" fill={color}/>
+      {/* Kaki kanan — ke belakang-bawah */}
+      <path d="M32 34 C34 40 38 48 42 54 C44 53 45 50 44 48 C40 43 37 37 34 32 Z" fill={color}/>
+      {/* Betis kanan */}
+      <path d="M42 54 C44 58 48 60 50 58 C51 56 50 53 48 52 C46 53 44 54 42 54 Z" fill={color}/>
     </svg>
   )
 }
 
 // ─── Run / Pelari (nav icon kecil) ───────────────────────────────────────────
-export function IconRun({ size = 24, color = 'currentColor', strokeWidth = sw }: IconProps) {
+export function IconRun({ size = 24, color = 'currentColor' }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 100 100" fill="none">
-      <circle cx="72" cy="18" r="10" fill={color}/>
-      <path d="M68 28 L52 55" stroke={color} strokeWidth="9" strokeLinecap="round"/>
-      <path d="M62 38 L42 52" stroke={color} strokeWidth={strokeWidth * 4} strokeLinecap="round"/>
-      <path d="M62 38 L80 28" stroke={color} strokeWidth={strokeWidth * 4} strokeLinecap="round"/>
-      <path d="M52 55 L35 72 L22 82" stroke={color} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M52 55 L60 75 L78 82" stroke={color} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round"/>
+    <svg width={size} height={size} viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="44" cy="8" r="6" fill={color}/>
+      <path d="M40 14 C36 16 30 22 26 32 L32 34 C35 26 39 21 42 18 Z" fill={color}/>
+      <path d="M40 18 C42 16 50 12 54 10 C55 13 53 15 51 16 C48 17 44 20 42 22 Z" fill={color}/>
+      <path d="M36 22 C32 26 24 30 20 32 C19 29 21 27 23 26 C27 24 32 20 34 18 Z" fill={color}/>
+      <path d="M26 32 C22 38 16 44 10 50 C8 48 9 45 11 44 C16 39 20 34 22 30 Z" fill={color}/>
+      <path d="M10 50 C8 54 10 58 12 58 C14 58 16 56 16 54 C14 52 12 51 10 50 Z" fill={color}/>
+      <path d="M32 34 C34 40 38 48 42 54 C44 53 45 50 44 48 C40 43 37 37 34 32 Z" fill={color}/>
+      <path d="M42 54 C44 58 48 60 50 58 C51 56 50 53 48 52 C46 53 44 54 42 54 Z" fill={color}/>
     </svg>
   )
 }
