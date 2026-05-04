@@ -22,6 +22,42 @@ interface DashboardProps {
   onNavigate: (page: string) => void
 }
 
+// ─── Date Selector ───────────────────────────────────────────────────────────
+function DateSelector() {
+  const today = new Date()
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(today)
+    d.setDate(today.getDate() - 3 + i)
+    return d
+  })
+  const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
+
+  return (
+    <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
+      {days.map((d, i) => {
+        const isToday = i === 3
+        return (
+          <div key={i} style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
+            padding: '8px 6px',
+            background: isToday ? 'rgba(255,255,255,0.2)' : 'transparent',
+            borderRadius: 12, minWidth: 34,
+            border: isToday ? '1px solid rgba(255,255,255,0.3)' : '1px solid transparent',
+          }}>
+            <span style={{ fontSize: 9, fontWeight: 600, color: isToday ? '#fff' : 'rgba(255,255,255,0.5)', letterSpacing: '0.04em' }}>
+              {dayNames[d.getDay()]}
+            </span>
+            <span style={{ fontSize: 15, fontWeight: 800, color: isToday ? '#fff' : 'rgba(255,255,255,0.6)', lineHeight: 1 }}>
+              {d.getDate()}
+            </span>
+            {isToday && <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#fff' }} />}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 // ─── Weekly Bar Chart ─────────────────────────────────────────────────────────
 function WeeklyChart({ data, todayIdx }: { data: number[]; todayIdx: number }) {
   const days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
@@ -193,6 +229,11 @@ export function Dashboard({ userId, userProfile, totalTerritoryKm2, onNavigate }
           </div>
           <Logo size="sm" variant="icon" />
         </div>
+      </div>
+
+      {/* ── Date selector (kembali) ── */}
+      <div style={{ padding: '0 16px 14px', background: '#fff', marginBottom: 0, borderBottom: '1px solid #F0EEEE' }}>
+        <DateSelector />
       </div>
 
       {/* Error banner */}

@@ -183,37 +183,40 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
   const currentRegions = availableRegions[activeTab]
 
   return (
-    <div style={{ background: '#F8F8F8', minHeight: '100%', paddingBottom: 16 }}>
+    <div style={{ background: '#F5F4F4', minHeight: '100%', paddingBottom: 16 }}>
 
-      {/* Header */}
-      <div style={{ background: '#fff', padding: '16px 20px 14px', borderBottom: '1px solid #F5F5F5' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      {/* Gradient hero */}
+      <div style={{
+        background: `linear-gradient(135deg, #C0392B 0%, #96281B 60%, #7B1F14 100%)`,
+        padding: '52px 20px 24px', position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{ position: 'absolute', top: -30, right: -30, width: 130, height: 130, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ fontSize: 11, color: '#AAA', margin: '0 0 2px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Activities Analyze</p>
-            <h1 style={{ fontSize: 22, fontWeight: 900, color: '#1A1A1A', margin: 0, letterSpacing: '-0.02em' }}>Peringkat</h1>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', margin: '0 0 4px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Kompetisi</p>
+            <h1 style={{ fontSize: 28, fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-0.03em' }}>Peringkat</h1>
           </div>
           {myRank && (
-            <div style={{ textAlign: 'right' }}>
-              <p style={{ fontSize: 10, color: '#AAA', margin: '0 0 2px', fontWeight: 600 }}>Peringkat Kamu</p>
-              <p style={{ fontSize: 24, fontWeight: 900, color: '#C0392B', margin: 0, letterSpacing: '-0.03em' }}>#{myRank}</p>
+            <div style={{ textAlign: 'right', background: 'rgba(255,255,255,0.15)', borderRadius: 14, padding: '8px 14px' }}>
+              <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', margin: '0 0 2px', fontWeight: 600 }}>Peringkat Kamu</p>
+              <p style={{ fontSize: 26, fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-0.03em' }}>#{myRank}</p>
             </div>
           )}
         </div>
       </div>
 
       {/* Level tabs */}
-      <div style={{ background: '#fff', padding: '0 20px 14px', borderBottom: '1px solid #F5F5F5', marginBottom: 12 }}>
-        <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid #F0F0F0' }}>
+      <div style={{ background: '#fff', padding: '0 20px', borderBottom: '1px solid #F0EEEE', marginBottom: 12 }}>
+        <div style={{ display: 'flex', gap: 0 }}>
           {TABS.map(({ level, label }) => (
             <button key={level} type="button" onClick={() => setActiveTab(level)}
               style={{
-                flex: 1, padding: '10px 4px',
+                flex: 1, padding: '12px 4px',
                 border: 'none', background: 'transparent',
                 fontSize: 13, fontWeight: activeTab === level ? 700 : 500,
                 color: activeTab === level ? '#C0392B' : '#AAA',
                 cursor: 'pointer',
-                borderBottom: activeTab === level ? '2px solid #C0392B' : '2px solid transparent',
-                marginBottom: -1,
+                borderBottom: activeTab === level ? '2.5px solid #C0392B' : '2.5px solid transparent',
                 transition: 'all 0.15s',
               }}>
               {label}
@@ -266,7 +269,7 @@ export function LeaderboardPage({ userId, regionIds = {} }: LeaderboardPageProps
         {loading && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[1, 2, 3, 4].map(i => (
-              <div key={i} style={{ height: 68, background: '#fff', borderRadius: 16, border: '1px solid #F5F5F5', opacity: 1 - i * 0.15 }} />
+              <div key={i} className="skeleton" style={{ height: 68, borderRadius: 16, opacity: 1 - i * 0.15 }} />
             ))}
           </div>
         )}

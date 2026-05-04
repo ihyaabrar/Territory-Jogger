@@ -169,61 +169,63 @@ export function ProfileSettings({
   const emoji = selAvatar?.emoji ?? '🏃'
 
   return (
-    <div style={{ background: '#F8F8F8', minHeight: '100%', paddingBottom: 24 }}>
+    <div style={{ background: '#F5F4F4', minHeight: '100%', paddingBottom: 24 }}>
 
-      {/* ── Profile header — like Behance "My Profile" ── */}
-      <div style={{ background: '#fff', padding: '20px 20px 24px', borderBottom: '1px solid #F5F5F5', marginBottom: 8 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-          <h1 style={{ fontSize: 22, fontWeight: 900, color: '#1A1A1A', margin: 0 }}>My Profile</h1>
+      {/* Gradient hero */}
+      <div style={{
+        background: `linear-gradient(135deg, #C0392B 0%, #96281B 60%, #7B1F14 100%)`,
+        padding: '52px 20px 28px', position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{ position: 'absolute', top: -40, right: -40, width: 150, height: 150, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            {/* Avatar */}
+            <div style={{ position: 'relative' }}>
+              <div style={{
+                width: 68, height: 68, borderRadius: '50%',
+                background: 'rgba(255,255,255,0.15)',
+                border: '2.5px solid rgba(255,255,255,0.5)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 32, backdropFilter: 'blur(8px)',
+              }}>
+                {emoji}
+              </div>
+              <div style={{ position: 'absolute', bottom: 0, right: 0, width: 20, height: 20, borderRadius: '50%', background: '#fff', border: `2px solid #C0392B`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: 10, color: '#C0392B' }}>✓</span>
+              </div>
+            </div>
+            <div>
+              <h1 style={{ fontSize: 20, fontWeight: 900, color: '#fff', margin: '0 0 2px', letterSpacing: '-0.02em' }}>
+                {profile?.username ?? form.username}
+              </h1>
+              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', margin: '0 0 8px', fontFamily: 'monospace' }}>{form.userColor}</p>
+              <div style={{ display: 'flex', gap: 14 }}>
+                <div>
+                  <p style={{ fontSize: 18, fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums' }}>{weeklyKm.toFixed(1)}</p>
+                  <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.55)', margin: 0, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' }}>km minggu ini</p>
+                </div>
+                <div style={{ width: 1, background: 'rgba(255,255,255,0.2)' }} />
+                <div>
+                  <p style={{ fontSize: 18, fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums' }}>{totalTerritoryKm2.toFixed(2)}</p>
+                  <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.55)', margin: 0, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' }}>km² wilayah</p>
+                </div>
+              </div>
+            </div>
+          </div>
           <button type="button" onClick={() => { setEditMode(!editMode); if (!editMode) setSuccess(null) }}
-            style={{ fontSize: 13, fontWeight: 600, color: '#C0392B', background: 'none', border: 'none', cursor: 'pointer' }}>
-            {editMode ? 'Cancel' : 'Edit Profile'}
+            style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 99, padding: '7px 14px', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(8px)' }}>
+            {editMode ? 'Batal' : 'Edit'}
           </button>
-        </div>
-
-        {/* Avatar + name */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{ position: 'relative' }}>
-            <div style={{
-              width: 72, height: 72, borderRadius: '50%',
-              background: `${form.userColor}20`,
-              border: `3px solid ${form.userColor}`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 36,
-              boxShadow: `0 4px 16px ${form.userColor}30`,
-            }}>
-              {emoji}
-            </div>
-            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 20, height: 20, borderRadius: '50%', background: form.userColor, border: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontSize: 10, color: '#fff' }}>✓</span>
-            </div>
-          </div>
-          <div>
-            <h2 style={{ fontSize: 20, fontWeight: 900, color: '#1A1A1A', margin: '0 0 3px', letterSpacing: '-0.02em' }}>
-              {profile?.username ?? form.username}
-            </h2>
-            <p style={{ fontSize: 12, color: '#AAA', margin: '0 0 6px', fontFamily: 'monospace' }}>{form.userColor}</p>
-            <div style={{ display: 'flex', gap: 16 }}>
-              <div>
-                <p style={{ fontSize: 16, fontWeight: 900, color: '#C0392B', margin: 0, letterSpacing: '-0.02em' }}>{weeklyKm.toFixed(1)}</p>
-                <p style={{ fontSize: 10, color: '#AAA', margin: 0, fontWeight: 600 }}>km minggu ini</p>
-              </div>
-              <div>
-                <p style={{ fontSize: 16, fontWeight: 900, color: '#1A1A1A', margin: 0, letterSpacing: '-0.02em' }}>{totalTerritoryKm2.toFixed(2)}</p>
-                <p style={{ fontSize: 10, color: '#AAA', margin: 0, fontWeight: 600 }}>km² wilayah</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
       {/* ── Edit form ── */}
       {editMode && (
-        <div style={{ marginBottom: 8 }}>
-          <p style={{ fontSize: 11, fontWeight: 700, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '12px 20px 8px', margin: 0 }}>
-            Edit Profil
-          </p>
-          <form onSubmit={handleSubmit} noValidate style={{ background: '#fff', borderTop: '1px solid #F5F5F5', borderBottom: '1px solid #F5F5F5', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ margin: '12px 16px 0', background: '#fff', borderRadius: 20, overflow: 'hidden', border: '1px solid #F0EEEE', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+          <div style={{ padding: '14px 16px', borderBottom: '1px solid #F0EEEE' }}>
+            <p style={{ fontSize: 12, fontWeight: 700, color: '#AAA', letterSpacing: '0.08em', textTransform: 'uppercase', margin: 0 }}>Edit Profil</p>
+          </div>
+          <form onSubmit={handleSubmit} noValidate style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: 14 }}>
             {errors.general && <div style={{ padding: '10px 14px', background: '#FDECEA', border: '1px solid #F5B7B1', borderRadius: 12, color: '#C0392B', fontSize: 13 }}>{errors.general}</div>}
             {success && <div style={{ padding: '10px 14px', background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: 12, color: '#16A34A', fontSize: 13, fontWeight: 600 }}>✓ {success}</div>}
 
@@ -297,39 +299,35 @@ export function ProfileSettings({
         </div>
       )}
 
-      {/* ── Personal Data section ── */}
-      <Section title="Personal Data">
-        <RowItem label="User Name" value={profile?.username ?? '—'} />
-        <RowItem label="Warna Wilayah" value={form.userColor} isLast />
-      </Section>
+      {/* ── Sections ── */}
+      <div style={{ margin: '12px 16px 0' }}>
+        <Section title="Personal Data">
+          <RowItem label="User Name" value={profile?.username ?? '—'} />
+          <RowItem label="Warna Wilayah" value={form.userColor} isLast />
+        </Section>
+      </div>
+      <div style={{ margin: '8px 16px 0' }}>
+        <Section title="System">
+          <div style={{ padding: '0 16px', borderBottom: '1px solid #F5F5F5' }}>
+            <Toggle value={showSpeed} onChange={(v) => { setShowSpeed(v); try { localStorage.setItem('tj_showSpeed', String(v)) } catch { /* ignore */ } }} label="Tampilkan Kecepatan" />
+          </div>
+          <div style={{ padding: '0 16px', borderBottom: '1px solid #F5F5F5' }}>
+            <Toggle value={voicePrompt} onChange={(v) => { setVoicePrompt(v); try { localStorage.setItem('tj_voicePrompt', String(v)) } catch { /* ignore */ } }} label="Panduan Suara" />
+          </div>
+          <RowItem label="Privacy Zone" onPress={onShowPrivacy} isLast />
+        </Section>
+      </div>
+      <div style={{ margin: '8px 16px 0' }}>
+        <Section title="Notifikasi">
+          <RowItem label="Invasion Alerts" value={unreadCount > 0 ? `${unreadCount} baru` : undefined} onPress={onShowNotifications} isLast />
+        </Section>
+      </div>
 
-      {/* ── System section ── */}
-      <Section title="System">
-        <div style={{ padding: '0 20px', borderBottom: '1px solid #F5F5F5' }}>
-          <Toggle value={showSpeed} onChange={(v) => {
-            setShowSpeed(v)
-            try { localStorage.setItem('tj_showSpeed', String(v)) } catch { /* ignore */ }
-          }} label="Show Current Speed" />
-        </div>
-        <div style={{ padding: '0 20px', borderBottom: '1px solid #F5F5F5' }}>
-          <Toggle value={voicePrompt} onChange={(v) => {
-            setVoicePrompt(v)
-            try { localStorage.setItem('tj_voicePrompt', String(v)) } catch { /* ignore */ }
-          }} label="Voice Prompt" />
-        </div>
-        <RowItem label="Privacy Zone" onPress={onShowPrivacy} isLast />
-      </Section>
-
-      {/* ── Notifications ── */}
-      <Section title="Notifikasi">
-        <RowItem label="Invasion Alerts" value={unreadCount > 0 ? `${unreadCount} baru` : undefined} onPress={onShowNotifications} isLast />
-      </Section>
-
-      {/* ── Sign out ── */}
-      <div style={{ padding: '0 16px', marginTop: 8 }}>
+      {/* Sign out */}
+      <div style={{ padding: '12px 16px 0' }}>
         <button type="button" onClick={onSignOut}
-          style={{ width: '100%', padding: '14px', background: '#fff', color: '#C0392B', border: '1.5px solid #F5B7B1', borderRadius: 14, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
-          Sign Out
+          style={{ width: '100%', padding: '14px', background: '#fff', color: '#C0392B', border: '1.5px solid rgba(192,57,43,0.25)', borderRadius: 16, fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          Keluar
         </button>
       </div>
     </div>
